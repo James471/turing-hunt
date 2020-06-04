@@ -1,4 +1,5 @@
+# Welcome to the Turing Treasure Hunt
 
-## Welcome to the Turing Treasure Hunt!
+To start, download the IISER World application from [here](https://github.com/IISERM/turing-hunt/releases/latest)
 
-Some nice things.
+Best of luck!!
