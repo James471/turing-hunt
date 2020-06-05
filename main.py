@@ -1,78 +1,8 @@
-
-import time
 import re
-import os
+from GameObjects import Location, Note, screen_clear, timed_print
 
+"""Build all the locations"""
 
-class Note:
-    def __init__(self, message, spot):
-        self.message = message
-        self.spot = spot
-
-    def __str__(self):
-        return "Found a Note " + self.spot + "!\n Note reads:\n" + self.message
-
-
-class Location:
-    def __init__(self, name, description, notes=None, locations=None):
-        self.name = name
-        self.description = description
-        self.notes = notes or []
-        self.locations = locations or []
-
-    def __str__(self):
-        return ("You are in " + self.name + "\n" +
-                "-----------------------------\n\n" +
-                self.description + "\n\n" +
-                "-----------------------------\n\n" +
-                "Connecting Locations: \n" +
-                "\n".join(["****" + i.name for i in self.locations]))
-
-    def __repr__(self):
-        return (self.name + ": \n" +
-                self.description + "\n" +
-                "\n" +
-                "Connecting Locations: \n" +
-                "\n".join(["----" + i.name for i in self.locations]))
-
-    def append_locations(self, newlocs: list):
-        self.locations.extend(newlocs)
-
-    def append_notes(self, newnotes: list):
-        self.notes.append(newnote)
-
-    def search(self):
-        print("Searching", end="", flush=True)
-        for _ in range(5):
-            time.sleep(1)
-            print(".", end="", flush=True)
-        print()
-        if len(self.notes) == 0:
-            return "Nothing here..."
-        else:
-            for i in self.notes:
-                print(i)
-                print()
-                input("Press Enter for the Next Note.")
-            return "No more notes"
-
-    def goto(self, new_loc_name: str):
-        for loc in self.locations:
-            if loc.name == new_loc_name:
-                return "Going to " + new_loc_name, loc
-        return "No such connecting location.", self
-
-
-def screen_clear():
-    # for mac and linux(here, os.name is 'posix')
-    if os.name == 'posix':
-        _ = os.system('clear')
-    else:
-        # for windows platfrom
-        _ = os.system('cls')
-
-
-# Build locations
 Main_Gate = Location(
     "Main Gate",
     "A Nice Big Arch!\nStudents are coming back from their friday night party at 12am...")
@@ -149,7 +79,7 @@ AB1_3F = Location(
 AB1_4F = Location('AB1_4F', 'Eerily dark and quiet')
 AB1_5F = Location(
     'AB1_5F',
-    'Eerily dark and quiet, but there\'s some news artical about Plastic Firecrackers...')
+    'Eerily dark and quiet, but there\'s some news article about Plastic Firecrackers...')
 AB2 = Location(
     'AB2',
     'ERROR! The app devs didn\'t care enough to make 2 AB\'s. There\'s nothing here.')
@@ -163,7 +93,7 @@ Animal_Facility = Location(
     'The everlasting humm of the machines...\n' +
     'What are these machines? What happens here? SO MANY QUESTIONS!')
 
-# Connect locations
+"""Connect the Locations to make a traversable map"""
 Main_Gate.append_locations([Behind_AB, Admin, CAF])
 East_Gate.append_locations([Animal_Facility, Behind_AB])
 T_Point.append_locations([CAF, LHC, Admin, BB_Court])
@@ -207,6 +137,35 @@ Gazebo.append_locations([Library, AB1, AB2, Behind_AB])
 Behind_AB.append_locations([Main_Gate, East_Gate, AB1, AB2, Gazebo])
 Animal_Facility.append_locations([LHC, East_Gate, AB1])
 
+"""Build Notes"""
+hostel_cctv = Note(
+    "YOU ARE UNDER CCTV SURVIELLENCE",
+    "on the Soft Board")
+
+
+def fake_clue_action():
+    print("The password is 5")  # some message
+    return input("What's the password? ") == "5"  # some prompt
+
+
+fake_clue = Note(
+    "This is a test clue",  # message of a clue
+    "under some table",  # some specific place
+    False,  # Not hidden
+    fake_clue_action,  # action object
+    hostel_cctv,  # next note
+    "Yay! Look for a treat in the Hostels",
+    "Noo, you dumb?")
+
+"""Add Notes to Locations"""
+H5.append_notes([hostel_cctv])
+H6.append_notes([hostel_cctv])
+H7.append_notes([hostel_cctv])
+H8.append_notes([hostel_cctv])
+
+H5_SR.append_notes([fake_clue])
+
+
 hello_banner = '''Welcome to the Virtual Treasure Hunt!
 The Treasure Hunt will go on until you finish it. The first person to finish will win.
 This is an individual game, but you can always team up with someone else.
@@ -214,13 +173,16 @@ But remember that they can hide things from you and win themselves.
 You can use the internet.
 Please remember that if you exit from this app (by pressing the X or by shutting down your computer),
 you will HAVE to restart. You can minimize this safely, however.
+We suggest that you also keep a notepad window open to note down information.
 
 Some clues may seem too technical, but they're generally straight forward.
 Just search the internet. Clues may be from
 - HTML and VERY SIMPLE Javascript
 - Python. If you know what loops are, you are good to go
-- Easy "math" puzzles
-- Some Computer Science Trivia
+- Easy Science or math puzzles
+- Some Science Trivia
+
+USE THE INTERNET!
 
 Go forth and do your best!'''
 
@@ -244,8 +206,4 @@ while True:
         msg = "Invalid Input"
 
     if (msg):
-        print(msg, flush=True, end="")
-        for i in range(3):
-            time.sleep(1)
-            print(".", flush=True, end="")
-        print()
+        timed_print(msg, 3)
