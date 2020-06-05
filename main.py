@@ -1,4 +1,5 @@
 import re
+import webbrowser
 from GameObjects import Location, Note, screen_clear, timed_print
 
 """Build all the locations"""
@@ -21,6 +22,7 @@ CAF = Location(
     "Very sensitive machines which may be disturbed by students eating in the cafeteria\n" +
     "You hear someone shouting at someone else in the distance, but do not record it, for it would be a violation of privacy")
 Library = Location("Library", "So quiet...")
+Computer_Centre=Location("Computer Centre", "A few computers have not been turned off")
 
 LHC = Location("LHC", "Ah the good old LHC...")
 LH1 = Location('LH1', "Locked...")
@@ -99,7 +101,8 @@ East_Gate.append_locations([Animal_Facility, Behind_AB])
 T_Point.append_locations([CAF, LHC, Admin, BB_Court])
 Admin.append_locations([Library, Main_Gate, CAF, T_Point])
 CAF.append_locations([Admin, Main_Gate, T_Point])
-Library.append_locations([Admin, LHC, Gazebo])
+Library.append_locations([Admin, LHC, Gazebo,Computer_Centre])
+Computer_Centre.append_locations([Library])
 
 LHC.append_locations([T_Point, Library, Rotunda, LH1,
                       LH2, LH3, LH4, LH5, LH6, LH7])
@@ -137,6 +140,44 @@ Gazebo.append_locations([Library, AB1, AB2, Behind_AB])
 Behind_AB.append_locations([Main_Gate, East_Gate, AB1, AB2, Gazebo])
 Animal_Facility.append_locations([LHC, East_Gate, AB1])
 
+def clue2Action():
+    webbrowser.open("clue2.html")
+    a=input("Waiting for your input...")
+    if a=="acceptme":
+        return True
+    return False
+
+clue2=Note(
+    "Another webpage on the way!",
+    "On a quantum computer!\nThey used a qunatum computer for opening a webpage? Perfect utilization of a non-existent resource",
+    True,
+    clue2Action,
+    None,
+    "Yeah, this was a joke. Now head to the ",
+    "Noooo!This one is dumb too.")
+
+def clue1Action():
+    webbrowser.open_new('q1.html')
+    a=input("What\'s the key")
+    if a=="TUr!ng":
+        return True
+    return False
+
+clue1=Note(
+    "You will be led to a webpage.",
+    "on a computer screen!",
+    False,
+    clue1Action,
+    clue2,
+    "You need to go to the CAF but since you can't teleport, first go to the T point",
+    "No, it's the first question. It's dumber than you think!")
+
+#clue3=Note()
+
+'''Add notes to locations'''
+Computer_Centre.append_notes([clue1])
+CAF.append_notes([clue2])
+'''
 """Build Notes"""
 hostel_cctv = Note(
     "YOU ARE UNDER CCTV SURVIELLENCE",
@@ -164,7 +205,7 @@ H7.append_notes([hostel_cctv])
 H8.append_notes([hostel_cctv])
 
 H5_SR.append_notes([fake_clue])
-
+'''
 
 hello_banner = '''Welcome to the Virtual Treasure Hunt!
 The Treasure Hunt will go on until you finish it. The first person to finish will win.
@@ -189,13 +230,16 @@ Go forth and do your best!'''
 print(hello_banner)
 input("Press Enter to start")
 here = H5_SR
+temp=True
 while True:
     screen_clear()
     print(here)
     print("\n\n")
     print("If you want to search around, type search or ls")
     print("If you want to go somewhere else, type goto _location_ or cd _location_")
-
+    if(temp==True):
+        print("You will find your first clue in the computer Centre. And you can\'t just teleport there, so you need to first go to the ground floor, then the rotunda, then...")
+        temp=False
     inp = input("Your choice: ")
     if re.search(r"(search|ls)", inp):
         msg = here.search()
