@@ -195,6 +195,7 @@ Stadium.append_locations([Rotunda, BB_Court, Shopping_Complex])
 BB_Court.append_locations([T_Point, Stadium])
 Shopping_Complex.append_locations([Stadium, VH])
 VH.append_locations([VH_Terrace, Shopping_Complex])
+VH_Terrace.append_locations([VH])
 
 AB1.append_locations([Gazebo, AB2, Behind_AB, AB1_1F, Animal_Facility])
 AB1_1F.append_locations([AB1, AB1_2F])
