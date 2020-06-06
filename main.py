@@ -145,10 +145,22 @@ hostel_cctv = Note(
     "on the Soft Board")
 
 
+
 def fake_clue_action():
     print("The password is 5")  # some message
     return input("What's the password? ") == "5"  # some prompt
 
+
+def printer_3d_action():
+    print("You go near the 3D printer and see a bunch of MS19 students sleeping around it.\nThey are probably tired from waiting their turn at the printer.\n\n\nPrinter shows a message 'Do you want to start printing?'")
+    return input("Do you want to print? [Y N] ") == "Y"
+
+def samrat_inno_action():
+    return input("Do you want to print and test this? [Y N] ")=="Y"
+
+def print_inno_action():
+    print("Lets print the innovation blueprint")
+    return input("Do you want to print? [Y N] ") == "Y"
 
 fake_clue = Note(
     "This is a test clue",  # message of a clue
@@ -159,6 +171,39 @@ fake_clue = Note(
     "Yay! Look for a treat in the Hostels",
     "Noo, you dumb?")
 
+printer_3d = Note(
+    "You see a 3D printer",
+    "outside physics lab",
+    False,
+    printer_3d_action,
+    fake_clue,
+    onComplete="The Printer started making weird noises.\nSHIT the students MS19 kids will wake up.\n\nBetter get out of here",
+    onFail = "Lets get outta here")
+
+stadium_test = Note(
+    "Lets fly this rocket.\n\n\nOH SHIT!!!!! IT HIT A LAPWIG!! \nRUUUUUN!!!!!",
+    "in the stadium",
+    )
+
+print_inno = Note(
+    "Theres the 3D printer, and its free? Huh",
+    "outside physics lab",
+    True,
+    print_inno_action,
+    stadium_test,
+    "Yay, Lets go to the stadium to test it",
+    "Naa dont wanna print it")
+
+samrat_inno = Note(
+    "There's a Blueprint, Innovation #42054....\n\ninsert rocket blueprint here\n\nMaybe I can 3D print this and see if it works.",
+    "near Samrat's Lab",
+    False,
+    samrat_inno_action,
+    print_inno,
+    "We will have to find a 3D printer.",
+    "Naa it wont be that fun anyways.")
+
+
 """Add Notes to Locations"""
 H5.append_notes([hostel_cctv])
 H6.append_notes([hostel_cctv])
@@ -167,6 +212,9 @@ H8.append_notes([hostel_cctv])
 
 H5_SR.append_notes([fake_clue])
 
+AB1_3F.append_notes([printer_3d,print_inno])
+AB1_4F.append_notes([samrat_inno])
+Stadium.append_notes([stadium_test])
 
 hello_banner = '''Welcome to the Virtual Treasure Hunt!
 The Treasure Hunt will go on until you finish it. The first person to finish will win.
