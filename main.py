@@ -1,5 +1,6 @@
 import re
 from GameObjects import Location, Note, screen_clear, timed_print
+import random
 
 """Build all the locations"""
 
@@ -137,16 +138,25 @@ Gazebo.append_locations([Library, AB1, AB2, Behind_AB])
 Behind_AB.append_locations([Main_Gate, East_Gate, AB1, AB2, Gazebo])
 Animal_Facility.append_locations([LHC, East_Gate, AB1])
 
-"""Build Notes"""
-hostel_cctv = Note(
-    "YOU ARE UNDER CCTV SURVIELLENCE",
-    "on the Soft Board")
 
 
 def fake_clue_action():
     print("The password is 5")  # some message
     return input("What's the password? ") == "5"  # some prompt
 
+def biswas_car_action():
+    print("Why would someone be driving around at midnight?! This is pretty shady.")
+    return input("Do you want to follow the car? [Y/N]") == "Y"
+
+def biswas_goto_action():
+    here = Location(random.choice(T_Point))
+    print here.goto()
+    return input("Do you want to continue following the car? [Y/N]") == "Y"
+
+"""Build Notes"""
+hostel_cctv = Note(
+    "YOU ARE UNDER CCTV SURVIELLENCE",
+    "on the Soft Board")
 
 fake_clue = Note(
     "This is a test clue",  # message of a clue
@@ -157,6 +167,17 @@ fake_clue = Note(
     "Yay! Look for a treat in the Hostels",
     "Noo, you dumb?")
 
+biswas_car = Note(
+    "You see a red sedan approaching almost quasistatically",
+    "It seems to be coming from Animal Facility road",
+    False,
+    biswas_car_action,
+    biswas_goto_action,
+    "This had better be worth-- \n WAIT! HE'S ASLEEP?! *facepalm*"
+    "Probably not important. It's not like he's going to run over anybody. \nRight?"
+    
+    
+    
 """Add Notes to Locations"""
 H5.append_notes([hostel_cctv])
 H6.append_notes([hostel_cctv])
@@ -164,9 +185,9 @@ H7.append_notes([hostel_cctv])
 H8.append_notes([hostel_cctv])
 
 H5_SR.append_notes([fake_clue])
+T_Point.append_notes([biswas_car])
 
-
-hello_banner = '''Welcome to the Virtual Treasure Hunt!
+hello_banner = '''Welcome to the Virtual Treasure Hunt!https://210.212.36.70/#/mailbox/INBOX/ramesh
 The Treasure Hunt will go on until you finish it. The first person to finish will win.
 This is an individual game, but you can always team up with someone else.
 But remember that they can hide things from you and win themselves.
