@@ -149,8 +149,8 @@ def biswas_car_action():
     return input("Do you want to follow the car? [Y/N]") == "Y"
 
 def biswas_goto_action():
-    here = Location(random.choice(T_Point))
-    print here.goto()
+    here = Location
+    print (here.goto(random.choice(T_Point)))
     return input("Do you want to continue following the car? [Y/N]") == "Y"
 
 """Build Notes"""
