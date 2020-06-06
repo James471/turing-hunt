@@ -174,7 +174,7 @@ biswas_car = Note(
     biswas_car_action,
     biswas_goto_action,
     "This had better be worth-- \n WAIT! HE'S ASLEEP?! *facepalm*"
-    "Probably not important. It's not like he's going to run over anybody. \nRight?"
+    "Probably not important. It's not like he's going to run over anybody. \nRight?")
     
     
     
