@@ -195,7 +195,7 @@ print_inno = Note(
     "Naa dont wanna print it")
 
 samrat_inno = Note(
-    "There's a Blueprint, Innovation #42054....\n\ninsert rocket blueprint here\n\nMaybe I can 3D print this and see if it works.",
+    "There's a Blueprint, Innovation #42054....\n\n#show image rocket.jpg\n\nMaybe I can 3D print this and see if it works.",
     "near Samrat's Lab",
     False,
     samrat_inno_action,
