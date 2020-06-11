@@ -1,11 +1,12 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+import os
 block_cipher = None
 
 
 a = Analysis(['main.py'],
              binaries=[],
-             datas=[],
+             datas=[("res", "res")],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
@@ -21,7 +22,7 @@ exe = EXE(pyz,
           a.binaries,
           a.zipfiles,
           a.datas,
-          [],
+          [('W ignore', None, 'OPTION')],
           name='main',
           debug=False,
           bootloader_ignore_signals=False,
