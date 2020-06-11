@@ -1,7 +1,8 @@
 import re
 from GameObjects import Location, Collectable
-from GameEngine import screen_clear, timed_print, close_game, opensite
+from GameEngine import screen_clear, timed_print, close_game, opensite, show_im
 import random
+
 
 """Build all the locations"""
 
@@ -161,7 +162,7 @@ Behind_AB.append_locations([Main_Gate, East_Gate, AB1, AB2, Gazebo])
 Animal_Facility.append_locations([LHC, East_Gate, AB1])
 
 
-"""Build Notes"""
+"""Build Actual clues"""
 
 
 def clue2Action():
@@ -204,6 +205,8 @@ clue1 = Collectable(
     onFail="No, it's the first question. It's dumber than you think!")
 
 
+
+""" Build FLUFF """
 hostel_cctv = Collectable(
     "Notice",
     "on the Soft Board",
@@ -213,23 +216,13 @@ hostel_cctv = Collectable(
     |   YOU ARE UNDER CCTV SURVIELLENCE!   |
     |                                      |
     ========================================
-
     """)
+
 
 
 def fake_clue_action():
     print("The password is 5")  # some message
     return input("What's the password? ") == "5"  # some prompt
-
-
-def biswas_car_action():
-    global here
-    choice: Location = random.random(
-        [Behind_AB, East_Gate, Animal_Facility, LHC, BB_Court, Stadium, Shopping_Complex])
-    print("You followed the car and ended up in " + choice.name + "!")
-    here = choice
-    return True
-
 
 fake_clue = Collectable(
     "Fake Clue",
@@ -241,15 +234,14 @@ fake_clue = Collectable(
     "Yay! Look for a treat in the Hostels",
     "Noo, you dumb?")
 
-torch = Collectable(
-    "Torch",
-    "on the table",
-    "It's a nice red color.",
-    action=Collectable.noaction,
-    hidden=False,
-    nextnotes=[],
-    onComplete="You turn it on and its very bright!\n"
-    "You can now see in the dark and outside!")
+def biswas_car_action():
+    global here
+    choice: Location = random.random(
+        [Behind_AB, East_Gate, Animal_Facility, LHC, BB_Court, Stadium, Shopping_Complex])
+    print("You followed the car and ended up in " + choice.name + "!")
+    here = choice
+    return True
+
 
 biswas_car = Collectable(
     "A Red sedan",
@@ -263,6 +255,61 @@ biswas_car = Collectable(
     onFail="Probably not important. It's not like they're going to run over anybody.\nRight?\n\nRIGHT?")
 
 
+stadium_test = Collectable(
+    "Rocket Pad",
+    "in the stadium",
+    "Lets fly the rocket.\n"
+    "It went so high that you can't even see it!!!\n\n\n"
+    "Oh no! It's falling back! RUNNN!",
+)
+
+def printer_3d_action():
+    print("Printer shows a message 'Please input the blueprint'")
+    print("You should wait for the MS19 kids to finish...\n\n Or you could print the blueprints now...")
+    return input("Do you want to print the blueprint? [Y N] ") == "Y"
+
+
+printer_3d = Collectable(
+    "a 3D printer",
+    "outside physics lab",
+    "You go near the 3D printer and see a bunch of MS19 students sleeping around it.\n"
+    "They are probably tired from waiting their turn at the printer.\n\n\n",
+    hidden=True,
+    action=printer_3d_action,
+    nextnotes=[stadium_test],
+    onComplete="The Printer started making weird noises.\n\n\n"
+    "You got a 3d printed rocket!"
+    "Better get out of here before the MS19 kids wake up.",
+    onFail="Lets get outta here")
+
+
+def samrat_inno_action():
+    show_im("rocket.jpg")
+    print("Maybe I can 3D print this and see if it works")
+    return input("Do you want to print and test this? [Y N] ")=="Y"
+
+
+samrat_inno = Collectable(
+    name="a Blueprint",
+    spot="on the table",
+    message="Innovation #42054....\n\n",
+    hidden=True,
+    action=samrat_inno_action,
+    nextnotes=[printer_3d],
+    onComplete="We will have to find a 3D printer...",
+    onFail="Naa it wont be that fun anyways.")
+
+
+torch = Collectable(
+    "Torch",
+    "on the table",
+    "It's a nice red color.",
+    action=Collectable.noaction,
+    hidden=False,
+    nextnotes=[printer_3d],
+    onComplete="You turn it on and its very bright!\n"
+    "You can now see in the dark and outside!")
+
 """Add Notes to Locations"""
 
 H5.append_notes([hostel_cctv])
@@ -273,6 +320,9 @@ H5_SR.append_notes([torch])
 Computer_Centre.append_notes([clue1])
 CAF.append_notes([clue2])
 T_Point.append_notes([biswas_car])
+AB1_3F.append_notes([printer_3d])
+AB1_4F.append_notes([samrat_inno])
+Stadium.append_notes([stadium_test])
 
 hello_banner = '''Welcome to the Virtual Treasure Hunt!
 The Treasure Hunt will go on until you finish it. The first person to finish will win.
