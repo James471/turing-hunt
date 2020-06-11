@@ -1,6 +1,7 @@
 import re
 from GameObjects import Location, Collectable
-from GameEngine import screen_clear, timed_print, close_game
+from GameEngine import screen_clear, timed_print, close_game, opensite
+
 
 """Build all the locations"""
 
@@ -26,6 +27,8 @@ CAF = Location(
     "You hear someone shouting at someone else in the distance, "
     "but do not record it, for it would be a violation of privacy")
 Library = Location("Library", "So quiet...")
+Computer_Centre = Location("Computer Centre",
+                           "A few computers have not been turned off")
 
 LHC = Location("LHC", "Ah the good old LHC...")
 LH1 = Location('LH1', "Locked...")
@@ -117,7 +120,8 @@ East_Gate.append_locations([Animal_Facility, Behind_AB])
 T_Point.append_locations([CAF, LHC, Admin, BB_Court])
 Admin.append_locations([Library, Main_Gate, CAF, T_Point])
 CAF.append_locations([Admin, Main_Gate, T_Point])
-Library.append_locations([Admin, LHC, Gazebo])
+Library.append_locations([Admin, LHC, Gazebo, Computer_Centre])
+Computer_Centre.append_locations([Library])
 
 LHC.append_locations([T_Point, Library, Rotunda, LH1,
                       LH2, LH3, LH4, LH5, LH6, LH7])
@@ -156,6 +160,48 @@ Gazebo.append_locations([Library, AB1, AB2, Behind_AB])
 Behind_AB.append_locations([Main_Gate, East_Gate, AB1, AB2, Gazebo])
 Animal_Facility.append_locations([LHC, East_Gate, AB1])
 
+
+def clue2Action():
+    webbrowser.open("clue2.html")
+    a = input("Waiting for your input...")
+    if a == "acceptme":
+        return True
+    return False
+
+
+clue2 = Collectable(
+    "Quantum Computer",
+    "in the BIG BIG hall"
+    "Another webpage on the way!"
+    "On a quantum computer!"
+    "They used a qunatum computer for opening a webpage? Perfect utilization of a non-existent resource",
+    True,
+    clue2Action,
+    None,
+    "Yeah, this was a joke. Now head to the ",
+    "Noooo! This one is dumb too.")
+
+
+def clue1Action():
+    webbrowser.open_new('q1.html')
+    a = input("What\'s the key")
+    if a == "TUr!ng":
+        return True
+    return False
+
+
+clue1 = Collectable(
+    "Tablet",
+    "on the Table"
+    "You will be led to a webpage. Solve the clue, go to the next",
+    False,
+    clue1Action,
+    [clue2],
+    "Costly Machines, easy clues...",
+    "No, it's the first question. It's dumber than you think!")
+
+# clue3=Note()
+
 """Build Notes"""
 
 hostel_cctv = Collectable(
@@ -168,8 +214,7 @@ hostel_cctv = Collectable(
     |                                      |
     ========================================
 
-    """
-)
+    """)
 
 
 def fake_clue_action():
@@ -195,8 +240,7 @@ torch = Collectable(
     hidden=False,
     nextnotes=[],  # Add all the Collectables that are in dark locations
     onComplete="You turn it on and its very bright!\n"
-    "You can now see in the dark and outside!"
-)
+    "You can now see in the dark and outside!")
 
 """Add Notes to Locations"""
 
@@ -204,9 +248,9 @@ H5.append_notes([hostel_cctv])
 H6.append_notes([hostel_cctv])
 H7.append_notes([hostel_cctv])
 H8.append_notes([hostel_cctv])
-
 H5_SR.append_notes([torch])
-
+Computer_Centre.append_notes([clue1])
+CAF.append_notes([clue2])
 
 hello_banner = '''Welcome to the Virtual Treasure Hunt!
 The Treasure Hunt will go on until you finish it. The first person to finish
@@ -243,7 +287,7 @@ while True:
           "type goto _location_ or cd _location_")
     print("If you are debugging and want to exit, type exit. "
           "Remove before publishing to prevent accidental closing")
-
+    print("If you want to go somewhere else, type goto _location_ or cd _location_")
     inp = input("Your choice: ")
     if re.search(r"^(search|ls)", inp):
         msg = here.search()
