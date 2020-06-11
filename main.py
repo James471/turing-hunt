@@ -161,9 +161,12 @@ Behind_AB.append_locations([Main_Gate, East_Gate, AB1, AB2, Gazebo])
 Animal_Facility.append_locations([LHC, East_Gate, AB1])
 
 
+"""Build Notes"""
+
+
 def clue2Action():
-    webbrowser.open("clue2.html")
-    a = input("Waiting for your input...")
+    opensite("https://iiserm.github.io/turing-hunt/clue2.html")
+    a = input("What's the password? ")
     if a == "acceptme":
         return True
     return False
@@ -171,10 +174,10 @@ def clue2Action():
 
 clue2 = Collectable(
     "Quantum Computer",
-    "in the BIG BIG hall"
-    "Another webpage on the way!"
-    "On a quantum computer!"
-    "They used a qunatum computer for opening a webpage? Perfect utilization of a non-existent resource",
+    "in the BIG BIG hall",
+    "Another webpage on the way, on a quantum computer!\n"
+    "They used a qunatum computer for opening a webpage?\n"
+    "Perfect utilization of a non-existent resource",
     True,
     clue2Action,
     None,
@@ -183,8 +186,8 @@ clue2 = Collectable(
 
 
 def clue1Action():
-    webbrowser.open_new('q1.html')
-    a = input("What\'s the key")
+    opensite('https://iiserm.github.io/turing-hunt/clue1.html')
+    a = input("What's the key? ")
     if a == "TUr!ng":
         return True
     return False
@@ -192,17 +195,14 @@ def clue1Action():
 
 clue1 = Collectable(
     "Tablet",
-    "on the Table"
+    "on the Table",
     "You will be led to a webpage. Solve the clue, go to the next",
-    False,
-    clue1Action,
-    [clue2],
-    "Costly Machines, easy clues...",
-    "No, it's the first question. It's dumber than you think!")
+    hidden=False,
+    action=clue1Action,
+    nextnotes=[clue2],
+    onComplete="Costly Machines, easy clues...",
+    onFail="No, it's the first question. It's dumber than you think!")
 
-# clue3=Note()
-
-"""Build Notes"""
 
 hostel_cctv = Collectable(
     "Notice",
@@ -287,7 +287,6 @@ while True:
           "type goto _location_ or cd _location_")
     print("If you are debugging and want to exit, type exit. "
           "Remove before publishing to prevent accidental closing")
-    print("If you want to go somewhere else, type goto _location_ or cd _location_")
     inp = input("Your choice: ")
     if re.search(r"^(search|ls)", inp):
         msg = here.search()
@@ -299,4 +298,4 @@ while True:
     else:
         msg = "Invalid Input"
     if (msg):
-        timed_print(msg, 0)
+        timed_print(msg, 3)

@@ -3,6 +3,7 @@ import imageio
 import time
 import os
 import matplotlib.pyplot as pl
+import webbrowser
 
 if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
     is_exe = True
@@ -46,3 +47,7 @@ def close_game():
         sys.exit(0)
     else:
         exit()
+
+
+def opensite(sitename):
+    webbrowser.open_new(sitename)
