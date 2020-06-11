@@ -1,7 +1,7 @@
 import re
 from GameObjects import Location, Collectable
 from GameEngine import screen_clear, timed_print, close_game, opensite
-
+import random
 
 """Build all the locations"""
 
@@ -222,6 +222,15 @@ def fake_clue_action():
     return input("What's the password? ") == "5"  # some prompt
 
 
+def biswas_car_action():
+    global here
+    choice: Location = random.random(
+        [Behind_AB, East_Gate, Animal_Facility, LHC, BB_Court, Stadium, Shopping_Complex])
+    print("You followed the car and ended up in " + choice.name + "!")
+    here = choice
+    return True
+
+
 fake_clue = Collectable(
     "Fake Clue",
     "under some table",  # some specific place
@@ -238,9 +247,21 @@ torch = Collectable(
     "It's a nice red color.",
     action=Collectable.noaction,
     hidden=False,
-    nextnotes=[],  # Add all the Collectables that are in dark locations
+    nextnotes=[],
     onComplete="You turn it on and its very bright!\n"
     "You can now see in the dark and outside!")
+
+biswas_car = Collectable(
+    "A Red sedan",
+    "coming from Animal Facility road",
+    "It's approaching almost quasistatically...\n"
+    "Why would someone be driving around at midnight?! This is pretty shady.",
+    hidden=False,
+    action=biswas_car_action,
+    nextnotes=[],
+    onComplete="This had better be worth-- \n WAIT! THE DRIVER IS ASLEEP?! *facepalm*",
+    onFail="Probably not important. It's not like they're going to run over anybody.\nRight?\n\nRIGHT?")
+
 
 """Add Notes to Locations"""
 
@@ -251,12 +272,12 @@ H8.append_notes([hostel_cctv])
 H5_SR.append_notes([torch])
 Computer_Centre.append_notes([clue1])
 CAF.append_notes([clue2])
+T_Point.append_notes([biswas_car])
 
 hello_banner = '''Welcome to the Virtual Treasure Hunt!
-The Treasure Hunt will go on until you finish it. The first person to finish
-will win.
-This is an individual game, but you can always team up with someone else. But
-remember that they can hide things from you and win themselves.
+The Treasure Hunt will go on until you finish it. The first person to finish will win.
+This is an individual game, but you can always team up with someone else.
+But remember that they can hide things from you and win themselves.
 You can use the internet.
 Please remember that if you exit from this app (by pressing the X or by
 shutting down your computer), you will HAVE to restart.
