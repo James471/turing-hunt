@@ -1,6 +1,6 @@
 import re
 from GameObjects import Location, Collectable
-from GameEngine import screen_clear, timed_print, close_game, opensite, show_im
+from GameEngine import screen_clear, timed_print, close_game, opensite, im_show
 import random
 
 
@@ -64,7 +64,7 @@ H8 = Location(
 H8_SR = Location(
     'H8 SR',
     'The ACs are off, its so hot...\nOh wait, they are on... '
-    'Why is it hot then?')
+    'Why is it so hot then? Oh the ACs aren\'t working')
 
 Stadium = Location('Stadium', 'A lapwing shouts in the distance...')
 BB_Court = Location('BB Court', 'Why the fuck do lapwings make so much noise?')
@@ -88,9 +88,12 @@ AB1_3F = Location(
     'AB1 3F',
     'One lone MS13 is studying there. Why haven\'t they graduated yet?')
 AB1_4F = Location('AB1 4F', 'Eerily dark and quiet')
+EBL_Lab = Location(
+    'EBL',
+    'So many dead flies in flasks.\n It\'s like a horror movie')
 AB1_5F = Location(
     'AB1 5F',
-    'Eerily dark and quiet, but there\'s some news article about'
+    'Eerily dark and quiet, but there\'s some news article about '
     'Plastic Firecrackers...')
 AB2 = Location(
     'AB2',
@@ -135,7 +138,7 @@ LH6.append_locations([LHC])
 LH7.append_locations([LHC])
 
 Rotunda.append_locations([LHC, H5, H6, H7, H8, Stadium])
-H5.append_locations([Rotunda, H5_SR])
+H5.append_locations([H5_SR])
 H6.append_locations([Rotunda, H6_SR])
 H7.append_locations([Rotunda, H7_SR])
 H8.append_locations([Rotunda, H8_SR])
@@ -154,7 +157,8 @@ AB1.append_locations([Gazebo, AB2, Behind_AB, AB1_1F, Animal_Facility])
 AB1_1F.append_locations([AB1, AB1_2F])
 AB1_2F.append_locations([AB1_1F, AB1_3F])
 AB1_3F.append_locations([AB1_2F, AB1_4F])
-AB1_4F.append_locations([AB1_3F, AB1_5F])
+AB1_4F.append_locations([AB1_3F, AB1_5F, EBL_Lab])
+EBL_Lab.append_locations([AB1_4F])
 AB1_5F.append_locations([AB1_4F])
 AB2.append_locations([Gazebo, Behind_AB, AB1])
 Gazebo.append_locations([Library, AB1, AB2, Behind_AB])
@@ -205,7 +209,6 @@ clue1 = Collectable(
     onFail="No, it's the first question. It's dumber than you think!")
 
 
-
 """ Build FLUFF """
 hostel_cctv = Collectable(
     "Notice",
@@ -219,10 +222,10 @@ hostel_cctv = Collectable(
     """)
 
 
-
 def fake_clue_action():
     print("The password is 5")  # some message
     return input("What's the password? ") == "5"  # some prompt
+
 
 fake_clue = Collectable(
     "Fake Clue",
@@ -234,9 +237,10 @@ fake_clue = Collectable(
     "Yay! Look for a treat in the Hostels",
     "Noo, you dumb?")
 
+
 def biswas_car_action():
     global here
-    choice: Location = random.random(
+    choice: Location = random.choice(
         [Behind_AB, East_Gate, Animal_Facility, LHC, BB_Court, Stadium, Shopping_Complex])
     print("You followed the car and ended up in " + choice.name + "!")
     here = choice
@@ -263,9 +267,10 @@ stadium_test = Collectable(
     "Oh no! It's falling back! RUNNN!",
 )
 
+
 def printer_3d_action():
     print("Printer shows a message 'Please input the blueprint'")
-    print("You should wait for the MS19 kids to finish...\n\n Or you could print the blueprints now...")
+    print("You should wait for the MS19 kids to finish...\n\nOr you could just print the blueprints now...")
     return input("Do you want to print the blueprint? [Y N] ") == "Y"
 
 
@@ -273,20 +278,20 @@ printer_3d = Collectable(
     "a 3D printer",
     "outside physics lab",
     "You go near the 3D printer and see a bunch of MS19 students sleeping around it.\n"
-    "They are probably tired from waiting their turn at the printer.\n\n\n",
+    "\n\nThey are probably tired from waiting their turn at the printer.",
     hidden=True,
     action=printer_3d_action,
     nextnotes=[stadium_test],
     onComplete="The Printer started making weird noises.\n\n\n"
-    "You got a 3d printed rocket!"
+    "You got a 3d printed rocket!\n"
     "Better get out of here before the MS19 kids wake up.",
     onFail="Lets get outta here")
 
 
 def samrat_inno_action():
-    show_im("rocket.jpg")
+    im_show("rocket.jpg")
     print("Maybe I can 3D print this and see if it works")
-    return input("Do you want to print and test this? [Y N] ")=="Y"
+    return input("Do you want to steal - no, borrow - this? [Y N] ") == "Y"
 
 
 samrat_inno = Collectable(
@@ -297,18 +302,43 @@ samrat_inno = Collectable(
     action=samrat_inno_action,
     nextnotes=[printer_3d],
     onComplete="We will have to find a 3D printer...",
-    onFail="Naa it wont be that fun anyways.")
+    onFail="Nope, it's someone else's property")
+
+
+def art_competition_action():
+    im_show("art1.jpg")
+    im_show("art2.jpg")
+    im_show("art3.jpg")
+    return True
+
+
+art_competition = Collectable(
+    name="multiple art pieces",
+    spot="on soft boards",
+    message="There was an art competition held a few days ago.\n"
+    "These are some of the beautiful paintings some people have made!",
+    hidden=False,
+    action=art_competition_action,
+    onComplete="Damn! Those were so pretty! I wish I could make things like that"
+)
+
+
+def torch_action():
+    print("You turn it on and its very bright!\n")
+    if input("Do you want to take it [Y N]? ") == "Y":
+        H5.append_locations([Rotunda])
+        return True
+    return False
 
 
 torch = Collectable(
     "Torch",
     "on the table",
     "It's a nice red color.",
-    action=Collectable.noaction,
+    action=torch_action,
     hidden=False,
-    nextnotes=[printer_3d],
-    onComplete="You turn it on and its very bright!\n"
-    "You can now see in the dark and outside!")
+    onComplete="You can now see in the dark and outside!",
+    onFail="You should really take it...")
 
 """Add Notes to Locations"""
 
@@ -321,8 +351,9 @@ Computer_Centre.append_notes([clue1])
 CAF.append_notes([clue2])
 T_Point.append_notes([biswas_car])
 AB1_3F.append_notes([printer_3d])
-AB1_4F.append_notes([samrat_inno])
+AB1_5F.append_notes([samrat_inno])
 Stadium.append_notes([stadium_test])
+LHC.append_notes([art_competition])
 
 hello_banner = '''Welcome to the Virtual Treasure Hunt!
 The Treasure Hunt will go on until you finish it. The first person to finish will win.
@@ -369,4 +400,4 @@ while True:
     else:
         msg = "Invalid Input"
     if (msg):
-        timed_print(msg, 3)
+        timed_print(msg, 0)
