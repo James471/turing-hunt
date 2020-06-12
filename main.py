@@ -1,6 +1,6 @@
 import re
 from GameObjects import Location, Collectable
-from GameEngine import screen_clear, timed_print, close_game, opensite, im_show
+from GameEngine import screen_clear, timed_print, close_game, opensite, im_show, copyFile
 import random
 
 
@@ -386,9 +386,9 @@ while True:
     print("\n\n")
     print("If you want to search around, type search or ls")
     print("If you want to go somewhere else, "
-          "type goto _location_ or cd _location_")
+            "type goto _location_ or cd _location_")
     print("If you are debugging and want to exit, type exit. "
-          "Remove before publishing to prevent accidental closing")
+            "Remove before publishing to prevent accidental closing")
     inp = input("Your choice: ")
     if re.search(r"^(search|ls)", inp):
         msg = here.search()
