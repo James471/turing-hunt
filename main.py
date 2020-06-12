@@ -168,6 +168,26 @@ Animal_Facility.append_locations([LHC, East_Gate, AB1])
 
 """Build Actual clues"""
 
+def clue3Action():
+    print("PENALTY at 45 degrees")
+    im_show("cube.jpg")
+    print("Message: Yzfyw zcqr AP") #change this please
+    a = input("Please give the message: ")
+    if a == "Abhay best CR": #change this please
+        return True
+    return False
+
+
+clue3 = Collectable(  #put the clue in lhc rn, change it to anywhere
+    "Poster",
+    "on the softboard",
+    "Its the poster of the Cubing comp held in college some time back",
+    True, #hidden false to check
+    clue3Action,
+    None,
+    "Yeah true that",
+    "Just search the net man")
+
 
 def clue2Action():
     opensite("https://iiserm.github.io/turing-hunt/clue2.html")
@@ -185,7 +205,7 @@ clue2 = Collectable(
     "Perfect utilization of a non-existent resource",
     True,
     clue2Action,
-    None,
+    nextnotes=[clue3], #made clue 3 next
     "Yeah, this was a joke. Now head to the ",
     "Noooo! This one is dumb too.")
 
@@ -354,6 +374,7 @@ AB1_3F.append_notes([printer_3d])
 AB1_5F.append_notes([samrat_inno])
 Stadium.append_notes([stadium_test])
 LHC.append_notes([art_competition])
+LHC.append_notes([clue3])
 
 hello_banner = '''Welcome to the Virtual Treasure Hunt!
 The Treasure Hunt will go on until you finish it. The first person to finish will win.
