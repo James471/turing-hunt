@@ -167,6 +167,33 @@ Animal_Facility.append_locations([LHC, East_Gate, AB1])
 
 
 """Build Actual clues"""
+def clue4Action():
+    i=0
+    nextq = False
+    question_prompt = ["Cell's leader says 'Carry on!' suspiciously..." ,
+    "Is the Spanish Crown alive?" , "Hiding in a plaza having a handicap" ,
+    "Chris, who left the hotel, heads the Public Relations Forum at Caribou Biosciences"]
+    answers = ["KARYON" , "CORONAVIRUS" , "ZAHAVI" , "CRISPR"]
+    while i<len(question_prompt):
+        print(question_prompt[i])
+        ans = input("Enter your answer: ")
+        if ans.upper() == answers[i]:
+            i+=1
+        else:
+            return False
+            break
+    return True
+
+clue4 = Collectable(
+    "Pop Quiz" ,
+    "LH5" ,
+    "A small sheet with a few questions (that will definitely be counted for your consolidated grades :-))" ,
+    True
+    clue4Action ,
+    None ,
+    "Yay!! You answered everything correctly! *happy biologist noises*"  ,
+    "oOPS. Looks like you'll need to start all over again")
+
 
 def clue3Action():
     print("PENALTY at 45 degrees")
@@ -184,7 +211,7 @@ clue3 = Collectable(  #put the clue in lhc rn, change it to anywhere
     "Its the poster of the Cubing comp held in college some time back",
     True, #hidden false to check
     clue3Action,
-    None,
+    nextnotes=[clue4],
     "Yeah true that",
     "Just search the net man")
 
@@ -375,6 +402,7 @@ AB1_5F.append_notes([samrat_inno])
 Stadium.append_notes([stadium_test])
 LHC.append_notes([art_competition])
 LHC.append_notes([clue3])
+LH5.append_notes([clue4])
 
 hello_banner = '''Welcome to the Virtual Treasure Hunt!
 The Treasure Hunt will go on until you finish it. The first person to finish will win.
