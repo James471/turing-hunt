@@ -1,6 +1,6 @@
 import re
 from GameObjects import Location, Collectable
-from GameEngine import screen_clear, timed_print, close_game, opensite, im_show
+from GameEngine import screen_clear, timed_print, close_game, opensite, im_show, copyFile
 import random
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -170,6 +170,36 @@ Animal_Facility.append_locations([LHC, East_Gate, AB1])
 """Build Actual clues"""
 
 
+def clue4Action():
+    i = 0
+    nextq = False
+    question_prompt = ["Cell's leader says 'Carry on!' suspiciously...",
+                       "Is the Spanish Crown alive?", "Hiding in a plaza having a handicap",
+                       "Chris, who left the hotel, heads the Public Relations Forum at Caribou Biosciences"]
+    answers = ["KARYON", "CORONAVIRUS", "ZAHAVI", "CRISPR"]
+    while i < len(question_prompt):
+        print(question_prompt[i])
+        ans = input("Enter your answer: ")
+        if ans.upper() == answers[i]:
+            i += 1
+        else:
+            return False
+            break
+    return True
+
+
+clue4 = Collectable(
+    "Bio Pop Quiz",
+    "tucked inside the bottle...?",
+    "Why would you do that?\n"
+    "A small sheet with a few questions (that will definitely be counted for your consolidated grades :-))",
+    True,
+    clue4Action,
+    None,
+    "Yay!! You answered everything correctly! *happy biologist noises*",
+    "OOPS. Looks like you'll need to start all over again")
+
+
 def clue3Action():
     print("PENALTY at 45 degrees")
     im_show("cube.jpg")
@@ -186,9 +216,9 @@ clue3 = Collectable(  # put the clue in lhc rn, change it to anywhere
     "Its the poster of the Cubing comp held in college some time back",
     True,  # hidden false to check
     clue3Action,
-    None,
-    "Yeah true that",
-    "Just search the net man")
+    nextnotes=[clue4],
+    onComplete="Yeah true that",
+    onFail="Just search the net man")
 
 
 def clue2Action():
@@ -376,6 +406,7 @@ AB1_3F.append_notes([printer_3d])
 AB1_5F.append_notes([samrat_inno])
 Stadium.append_notes([stadium_test])
 LHC.append_notes([art_competition, clue3])
+LH5.append_notes([clue4])
 
 
 def makemap():
