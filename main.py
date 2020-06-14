@@ -1,8 +1,9 @@
 import re
 from GameObjects import Location, Collectable
-from GameEngine import screen_clear, timed_print, close_game, opensite, im_show
+from GameEngine import screen_clear, timed_print, close_game, opensite, im_show, copyFile
 import random
-
+import networkx as nx
+import matplotlib.pyplot as plt
 
 """Build all the locations"""
 
@@ -168,25 +169,56 @@ Animal_Facility.append_locations([LHC, East_Gate, AB1])
 
 """Build Actual clues"""
 
+
+def clue4Action():
+    i = 0
+    nextq = False
+    question_prompt = ["Cell's leader says 'Carry on!' suspiciously...",
+                       "Is the Spanish Crown alive?", "Hiding in a plaza having a handicap",
+                       "Chris, who left the hotel, heads the Public Relations Forum at Caribou Biosciences"]
+    answers = ["KARYON", "CORONAVIRUS", "ZAHAVI", "CRISPR"]
+    while i < len(question_prompt):
+        print(question_prompt[i])
+        ans = input("Enter your answer: ")
+        if ans.upper() == answers[i]:
+            i += 1
+        else:
+            return False
+            break
+    return True
+
+
+clue4 = Collectable(
+    "Bio Pop Quiz",
+    "tucked inside the bottle...?",
+    "Why would you do that?\n"
+    "A small sheet with a few questions (that will definitely be counted for your consolidated grades :-))",
+    True,
+    clue4Action,
+    None,
+    "Yay!! You answered everything correctly! *happy biologist noises*",
+    "OOPS. Looks like you'll need to start all over again")
+
+
 def clue3Action():
     print("PENALTY at 45 degrees")
     im_show("cube.jpg")
-    print("Message: Yzfyw zcqr AP") #change this please
+    print("Message: Yzfyw zcqr AP")  # change this please
     a = input("Please give the message: ")
-    if a == "Abhay best CR": #change this please
+    if a == "Abhay best CR":  # change this please
         return True
     return False
 
 
-clue3 = Collectable(  #put the clue in lhc rn, change it to anywhere
+clue3 = Collectable(  # put the clue in lhc rn, change it to anywhere
     "Poster",
     "on the softboard",
     "Its the poster of the Cubing comp held in college some time back",
-    True, #hidden false to check
+    True,  # hidden false to check
     clue3Action,
-    None,
-    "Yeah true that",
-    "Just search the net man")
+    nextnotes=[clue4],
+    onComplete="Yeah true that",
+    onFail="Just search the net man")
 
 
 def clue2Action():
@@ -205,9 +237,9 @@ clue2 = Collectable(
     "Perfect utilization of a non-existent resource",
     True,
     clue2Action,
-    nextnotes=[clue3], #made clue 3 next
-    "Yeah, this was a joke. Now head to the ",
-    "Noooo! This one is dumb too.")
+    nextnotes=[clue3],  # made clue 3 next
+    onComplete="Yeah, this was a joke. Now head to the ",
+    onFail="Noooo! This one is dumb too.")
 
 
 def clue1Action():
@@ -373,8 +405,19 @@ T_Point.append_notes([biswas_car])
 AB1_3F.append_notes([printer_3d])
 AB1_5F.append_notes([samrat_inno])
 Stadium.append_notes([stadium_test])
-LHC.append_notes([art_competition])
-LHC.append_notes([clue3])
+LHC.append_notes([art_competition, clue3])
+LH5.append_notes([clue4])
+
+
+def makemap():
+    g: nx.DiGraph = nx.DiGraph()
+    for loc in [Main_Gate, East_Gate, T_Point, Admin, CAF, Library, Computer_Centre, LHC, LH1, LH2, LH3, LH4, LH5, LH6, LH7, Rotunda, H5, H5_SR, H6, H6_SR, H7, H7_SR,
+                H8, H8_SR, Stadium, BB_Court, VH, VH_Terrace, Shopping_Complex, AB1, AB1_1F, AB1_2F, AB1_3F, AB1_4F, EBL_Lab, AB1_5F, AB2, Gazebo, Behind_AB, Animal_Facility]:
+        for loc2 in loc.locations:
+            g.add_edge(loc.name, loc2.name)
+    nx.draw_spring(g, with_labels=True)
+    plt.show()
+
 
 hello_banner = '''Welcome to the Virtual Treasure Hunt!
 The Treasure Hunt will go on until you finish it. The first person to finish will win.
@@ -397,10 +440,10 @@ USE THE INTERNET!
 
 Go forth and do your best!'''
 
+makemap()
 print(hello_banner)
 input("Press Enter to start")
 here = H5_SR
-
 while True:
     screen_clear()
     print(here)
