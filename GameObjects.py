@@ -1,28 +1,29 @@
-import time
-import os
-from typing import Callable, Type, List
+from typing import Callable, List
+from GameEngine import screen_clear, timed_print
 
 
-class Note:
-    def __init__(self, message: str, spot: str, hidden: bool = True,
+class Collectable:
+    def __init__(self, name: str, spot: str, message: str, hidden: bool = False,
                  action: Callable[[], bool] = None,
-                 nextnote=None,
+                 nextnotes: List = None,
                  onComplete: str = "Clue completed", onFail: str = "Incorrect answer",
                  ) -> None:
         """Initialises a Note object
 
         Args:
+            name(str): Name of this Collectable
             message (str): The message that is displayed
             spot (str): A more specific location where it is found. For example, "under a bottle"
-            hidden (bool): Whether the Note is visible or not
+            hidden (bool) = False: Whether the Note is visible or not
             action (Callable[[], bool]) = None: The action to do to challenge the player.
             onComplete (str) = "Clue completed": The string to print if action completed successfully
             onFail (str) = "Incorrect answer": The string to print if action unseccessful
         """
+        self.name = name
         self.message = message
         self.spot = spot
         self.hidden = hidden
-        self.nextnote = nextnote
+        self.nextnotes = nextnotes if nextnotes else []
         self.action = action
         self.onComplete = onComplete
         self.onFail = onFail
@@ -33,28 +34,34 @@ class Note:
         Returns:
             str: [description]
         """
-        return "Found a Note " + self.spot + "!\n\n Note reads:\n" + self.message + "\n\n"
+        return "Found a " + self.name + " " + self.spot + \
+            "!\n\n" + self.message + "\n\n"
 
     def show(self):
         print(self)
         if (self.action is not None and
-                input("Do you want to solve the clue[Y N]? ") == "Y"):
+                input("Do you want to check it out[Y N]? ") == "Y"):
             while True:
                 screen_clear()
                 if (self.action()):
                     print(self.onComplete)
                     self.hidden = True
-                    self.nextnote.hidden = False
+                    for i in self.nextnotes:
+                        i.hidden = False
                     break
                 else:
                     print(self.onFail)
                     if (input("Try again[Y N]? ") == "N"):
                         break
 
+    @staticmethod
+    def noaction():
+        return True
+
 
 class Location:
     def __init__(self, name: str, description: str,
-                 notes: List[Note] = None, locations: List = None) -> None:
+                 notes: List[Collectable] = None, locations: List = None) -> None:
         self.name = name
         self.description = description
         self.notes = notes or []
@@ -98,28 +105,11 @@ class Location:
                 screen_clear()
                 i.show()
                 print()
-                input("Press Enter for the Next Note.")
-            return "No more notes"
+                input("Press Enter to continue searching")
+            return "Nothing else here!"
 
     def goto(self, new_loc_name: str):
         for loc in self.locations:
-            if loc.name == new_loc_name:
-                return "Going to " + new_loc_name, loc
+            if loc.name.lower().strip() == new_loc_name.lower().strip():
+                return "Going to " + loc.name, loc
         return "No such connecting location.", self
-
-
-def screen_clear():
-    # for mac and linux(here, os.name is 'posix')
-    if os.name == 'posix':
-        _ = os.system('clear')
-    else:
-        # for windows platfrom
-        _ = os.system('cls')
-
-
-def timed_print(msg: str, secs: int):
-    print(msg, end="", flush=True)
-    for _ in range(secs):
-        time.sleep(1)
-        print(".", end="", flush=True)
-    print()
