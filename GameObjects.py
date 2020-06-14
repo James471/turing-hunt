@@ -3,7 +3,7 @@ from GameEngine import screen_clear, timed_print
 
 
 class Collectable:
-    def __init__(self, name: str, spot: str, message: str, hidden: bool = False,
+    def __init__(self, name: str, spot: str, desc: str, hidden: bool = False,
                  action: Callable[[], bool] = None,
                  nextnotes: List = None,
                  onComplete: str = "Clue completed", onFail: str = "Incorrect answer",
@@ -12,15 +12,16 @@ class Collectable:
 
         Args:
             name(str): Name of this Collectable
-            message (str): The message that is displayed
+            desc (str): The message that is displayed
             spot (str): A more specific location where it is found. For example, "under a bottle"
             hidden (bool) = False: Whether the Note is visible or not
+            pocketable (bool) = False: Whether to add to pocket or not
             action (Callable[[], bool]) = None: The action to do to challenge the player.
             onComplete (str) = "Clue completed": The string to print if action completed successfully
             onFail (str) = "Incorrect answer": The string to print if action unseccessful
         """
         self.name = name
-        self.message = message
+        self.desc = desc
         self.spot = spot
         self.hidden = hidden
         self.nextnotes = nextnotes if nextnotes else []
@@ -28,14 +29,8 @@ class Collectable:
         self.onComplete = onComplete
         self.onFail = onFail
 
-    def __str__(self) -> str:
-        """Get a string representation to print
-
-        Returns:
-            str: [description]
-        """
-        return "Found a " + self.name + " " + self.spot + \
-            "!\n\n" + self.message + "\n\n"
+    def __repr__(self):
+        return self.name + " - " + self.desc
 
     def show(self):
         print(self)
@@ -83,7 +78,7 @@ class Location:
         """
         self.locations.extend(newlocs)
 
-    def append_notes(self, newnotes: List):
+    def append_collectable(self, newnotes: List):
         """Append notes to this location
 
         Args:
@@ -113,3 +108,26 @@ class Location:
             if loc.name.lower().strip() == new_loc_name.lower().strip():
                 return "Going to " + loc.name, loc
         return "No such connecting location.", self
+
+
+class _PocketClass:
+    def __init__(self):
+        self.contents = []
+
+    def __contains__(self, item):
+        self.contents.__contains__(item)
+
+    def append(self, item: Collectable):
+        self.contents.append(item)
+
+    def show(self):
+        screen_clear()
+        print("This is your pocket: ")
+        print()
+        for i in self.contents:
+            print(i)
+        print()
+        input("Enter to close")
+
+
+Pocket = _PocketClass()

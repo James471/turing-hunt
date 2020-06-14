@@ -46,13 +46,19 @@ def im_show(filename: str):
 
 
 def copyFile(filename):
-    Tk().withdraw()
+    tkroot = Tk()
+    tkroot.lift()
+    tkroot.attributes('-topmost', True)
+    tkroot.withdraw()
     dst = askdirectory()
-    src="res/"+filename
+    print("Copied to ", dst)
+    src = os.path.join(path_to_res, filename)
     try:
-        _=copy(src,dst)
-    except:
-        print("File not found")
+        _ = copy(src, dst)
+        return dst
+    except Exception as e:
+        print(e)
+        return False
 
 
 def close_game():
@@ -63,4 +69,4 @@ def close_game():
 
 
 def opensite(sitename):
-    webbrowser.open_new(sitename)
+    webbrowser.open_new("file://" + os.path.join(path_to_res, sitename))
