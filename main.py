@@ -409,6 +409,7 @@ LHC.append_notes([art_competition, clue3])
 LH5.append_notes([clue4])
 
 
+
 def makemap():
     g: nx.DiGraph = nx.DiGraph()
     for loc in [Main_Gate, East_Gate, T_Point, Admin, CAF, Library, Computer_Centre, LHC, LH1, LH2, LH3, LH4, LH5, LH6, LH7, Rotunda, H5, H5_SR, H6, H6_SR, H7, H7_SR,
