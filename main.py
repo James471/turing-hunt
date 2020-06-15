@@ -227,7 +227,7 @@ def clue3Action():
     print("Message: C.Amjg md eclcrgaq")  # change this please
     a = input("What does that mean? ")
     if a == "E.Coli of genetics":  # change this please
-        Pocket("Clue - E.Coli of genetics")
+        Pocket.append("Clue - E.Coli of genetics")
         return True
     return False
 
@@ -442,12 +442,13 @@ EBL_Lab.append_collectable([clue4])
 
 
 def makemap():
+    plt.figure(figsize=(10,10))
     g: nx.DiGraph = nx.DiGraph()
     for loc in [Main_Gate, East_Gate, T_Point, Health_Center, Admin, CAF, Library, Computer_Centre, LHC, LH1, LH2, LH3, LH4, LH5, LH6, LH7, Rotunda, H5, H5_SR, H6, H6_SR, H7,
                 H7_SR, H8, H8_SR, Stadium, BB_Court, VH, VH_Terrace, Shopping_Complex, AB1, AB1_1F, AB1_2F, AB1_3F, AB1_4F, EBL_Lab, AB1_5F, AB2, Gazebo, Behind_AB, Animal_Facility]:
         for loc2 in loc.locations:
             g.add_edge(loc.name, loc2.name)
-    nx.draw_kamada_kawai(g, with_labels=True)
+    nx.draw_kamada_kawai(g, with_labels=True,alpha=0.7,node_size=1000,font_size=10,width=2,arrows=True,edge_color='#6B6B6B')
     plt.show()
 
 
