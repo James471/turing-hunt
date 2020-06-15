@@ -119,6 +119,10 @@ Animal_Facility = Location(
     'Animal Facility',
     'The everlasting humm of the machines...\n' +
     'What are these machines? What happens here? SO MANY QUESTIONS!')
+Room69=Location(
+    'Room No. 69',
+    'Why is it numbered 69 if it is the only room here?\n'+
+    'I have found this place unlocked for the first time. Should explore it a bit.')
 
 """Connect the Locations to make a traversable map"""
 Main_Gate.append_locations([Behind_AB, Admin, CAF])
@@ -131,7 +135,7 @@ Library.append_locations([Admin, LHC, Gazebo, Computer_Centre])
 Computer_Centre.append_locations([Library])
 
 LHC.append_locations([T_Point, Library, Rotunda, LH1,
-                      LH2, LH3, LH4, LH5, LH6, LH7])
+                      LH2, LH3, LH4, LH5, LH6, LH7, Animal_Facility])
 LH1.append_locations([LHC])
 LH2.append_locations([LHC])
 LH3.append_locations([LHC])
@@ -166,7 +170,8 @@ AB1_5F.append_locations([AB1_4F])
 AB2.append_locations([Gazebo, Behind_AB, AB1])
 Gazebo.append_locations([Library, AB1, AB2, Behind_AB])
 Behind_AB.append_locations([Main_Gate, East_Gate, AB1, AB2, Gazebo])
-Animal_Facility.append_locations([LHC, East_Gate, AB1])
+Animal_Facility.append_locations([LHC, East_Gate, AB1,Room69])
+Room69.append_locations([Animal_Facility])
 
 
 """Build Actual clues"""
@@ -196,6 +201,31 @@ clue6 = Collectable(
     None,
     "Let's see what's inside the box now. ugh.. next location...",
     "Hehe seems like you're directionally challenged :)\n look at it from a different perspective maybe" )
+
+
+def clue7Action():
+    print("There is a file. Save it in your PC.")
+    a=input("Would you like to proceed?[Y/N]")
+    if(a=="Y"):
+        _=copyFile("image.jpg")
+    b=input("Enter the number if you have found it or press N to go back.")
+    if(b=="690"):
+        Pocket.append("Truly, 69 is an important number.")
+        return True
+    return False
+
+
+clue7=Collectable(
+    "Found a USB drive",
+    "Hanging from the ceiling by means of a thread!Either the developer was too sleepy to think of anything better or this is a wierd place.",
+    "Should plug it in my pc to check what it is",
+    hidden=False,
+    action=clue7Action,
+    nextnotes=None,
+    onComplete="That was some smart work! Truly 69 is an important number",
+    onFail="What's the first thing you do when you don't know what a file is?"
+)
+
 
 def clue5Action():
     i = 0
@@ -430,6 +460,21 @@ art_competition = Collectable(
 )
 
 
+def room69Action():
+    im_show('69.jpg')
+    return True
+
+
+room69poster=Collectable(
+    name='A room full of cult articles',
+    spot='everywhere',
+    desc='There is a poster on the wall. Should read it.',
+    hidden=False,
+    action=room69Action,
+    onComplete="Those are some wierd things."
+)
+
+
 def torch_action():
     print("You turn it on and its very bright!\n")
     if input("Do you want to take it [Y N]? ") == "Y":
@@ -454,6 +499,7 @@ H5.append_collectable([hostel_cctv])
 H6.append_collectable([hostel_cctv])
 H7.append_collectable([hostel_cctv])
 H8.append_collectable([hostel_cctv])
+H8_SR.append_collectable([clue7])
 H5_SR.append_collectable([torch])
 Rotunda.append_collectable([clue6])
 Computer_Centre.append_collectable([clue1])
@@ -465,6 +511,8 @@ Stadium.append_collectable([stadium_test])
 LHC.append_collectable([art_competition, clue3])
 LH5.append_collectable([clue5])
 EBL_Lab.append_collectable([clue4])
+Room69.append_collectable([room69poster])
+
 
 
 
@@ -472,7 +520,7 @@ def makemap():
     plt.figure(figsize=(10,10))
     g: nx.DiGraph = nx.DiGraph()
     for loc in [Main_Gate, East_Gate, T_Point, Health_Center, Admin, CAF, Library, Computer_Centre, LHC, LH1, LH2, LH3, LH4, LH5, LH6, LH7, Rotunda, H5, H5_SR, H6, H6_SR, H7,
-                H7_SR, H8, H8_SR, Stadium, BB_Court, VH, VH_Terrace, Shopping_Complex, AB1, AB1_1F, AB1_2F, AB1_3F, AB1_4F, EBL_Lab, AB1_5F, AB2, Gazebo, Behind_AB, Animal_Facility]:
+                H7_SR, H8, H8_SR, Stadium, BB_Court, VH, VH_Terrace, Shopping_Complex, AB1, AB1_1F, AB1_2F, AB1_3F, AB1_4F, EBL_Lab, AB1_5F, AB2, Gazebo, Behind_AB, Animal_Facility, Room69]:
         for loc2 in loc.locations:
             g.add_edge(loc.name, loc2.name)
     nx.draw_kamada_kawai(g, with_labels=True,alpha=0.7,node_size=1000,font_size=10,width=2,arrows=True,edge_color='#6B6B6B')
