@@ -219,7 +219,7 @@ clue5 = Collectable(
     "tucked inside the bottle...?",
     "Why would you do that?\n"
     "A small sheet with a few questions (that will definitely be counted for your consolidated grades :-))",
-    False,
+    True,
     clue5Action,
     nextnotes=[clue6],
     onComplete="Yay!! You answered everything correctly!\n"
