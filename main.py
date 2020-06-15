@@ -1,5 +1,5 @@
 import re
-from GameObjects import Location, Collectable
+from GameObjects import Location, Collectable, Pocket
 from GameEngine import screen_clear, timed_print, close_game, opensite, im_show, copyFile
 import random
 import networkx as nx
@@ -31,6 +31,7 @@ CAF = Location(
 Library = Location("Library", "So quiet...")
 Computer_Centre = Location("Computer Centre",
                            "A few computers have not been turned off")
+Health_Center = Location("Health Center", "A very dark and scary place...")
 
 LHC = Location("LHC", "Ah the good old LHC...")
 LH1 = Location('LH1', "Locked...")
@@ -122,7 +123,8 @@ Animal_Facility = Location(
 """Connect the Locations to make a traversable map"""
 Main_Gate.append_locations([Behind_AB, Admin, CAF])
 East_Gate.append_locations([Animal_Facility, Behind_AB])
-T_Point.append_locations([CAF, LHC, Admin, BB_Court])
+T_Point.append_locations([CAF, LHC, Admin, Health_Center])
+Health_Center.append_locations([T_Point, BB_Court])
 Admin.append_locations([Library, Main_Gate, CAF, T_Point])
 CAF.append_locations([Admin, Main_Gate, T_Point])
 Library.append_locations([Admin, LHC, Gazebo, Computer_Centre])
@@ -149,7 +151,7 @@ H7_SR.append_locations([H7])
 H8_SR.append_locations([H8])
 
 Stadium.append_locations([Rotunda, BB_Court, Shopping_Complex])
-BB_Court.append_locations([T_Point, Stadium])
+BB_Court.append_locations([Health_Center, Stadium])
 Shopping_Complex.append_locations([Stadium, VH])
 VH.append_locations([VH_Terrace, Shopping_Complex])
 VH_Terrace.append_locations([VH])
@@ -170,9 +172,8 @@ Animal_Facility.append_locations([LHC, East_Gate, AB1])
 """Build Actual clues"""
 
 
-def clue4Action():
+def clue5Action():
     i = 0
-    nextq = False
     question_prompt = ["Cell's leader says 'Carry on!' suspiciously...",
                        "Is the Spanish Crown alive?", "Hiding in a plaza having a handicap",
                        "Chris, who left the hotel, heads the Public Relations Forum at Caribou Biosciences"]
@@ -184,28 +185,49 @@ def clue4Action():
             i += 1
         else:
             return False
-            break
+    Pocket.append("Bio Pop quiz answer sheet - Should show friends in Rotunda")
     return True
 
 
-clue4 = Collectable(
+clue5 = Collectable(
     "Bio Pop Quiz",
     "tucked inside the bottle...?",
     "Why would you do that?\n"
     "A small sheet with a few questions (that will definitely be counted for your consolidated grades :-))",
     True,
-    clue4Action,
+    clue5Action,
     None,
-    "Yay!! You answered everything correctly! *happy biologist noises*",
+    "Yay!! You answered everything correctly!\n"
+    "*happy biologist noises*\n"
+    "Maybe you should go tell your friends in Rotunda",
     "OOPS. Looks like you'll need to start all over again")
+
+
+def clue4Action():
+    if dst := copyFile("mutations.pdf"):
+        Pocket.append("mutations.pdf in " + dst)
+        return True
+    return False
+
+
+clue4 = Collectable(
+    "BIO211 experiment draft",
+    "in the dustbin",
+    "Maybe this holds some mysteries to the next location?",
+    hidden=True,
+    action=clue4Action,
+    onComplete="Read the copied file, the secret lies within",
+    onFail="File copy error, retry"
+)
 
 
 def clue3Action():
     print("PENALTY at 45 degrees")
     im_show("cube.jpg")
-    print("Message: Yzfyw zcqr AP")  # change this please
-    a = input("Please give the message: ")
-    if a == "Abhay best CR":  # change this please
+    print("Message: C.Amjg md eclcrgaq")  # change this please
+    a = input("What does that mean? ")
+    if a == "E.Coli of genetics":  # change this please
+        Pocket("Clue - E.Coli of genetics")
         return True
     return False
 
@@ -213,18 +235,19 @@ def clue3Action():
 clue3 = Collectable(  # put the clue in lhc rn, change it to anywhere
     "Poster",
     "on the softboard",
-    "Its the poster of the Cubing comp held in college some time back",
+    "Its the poster of the Cubing competition held in college some time back",
     True,  # hidden false to check
     clue3Action,
     nextnotes=[clue4],
-    onComplete="Yeah true that",
+    onComplete="Hmm? Is that important?",
     onFail="Just search the net man")
 
 
 def clue2Action():
-    opensite("https://iiserm.github.io/turing-hunt/clue2.html")
+    opensite("clue2.html")
     a = input("What's the password? ")
     if a == "acceptme":
+        Pocket.append("clue - Large Hadron Collider")
         return True
     return False
 
@@ -238,14 +261,15 @@ clue2 = Collectable(
     True,
     clue2Action,
     nextnotes=[clue3],  # made clue 3 next
-    onComplete="Yeah, this was a joke. Now head to the ",
+    onComplete="Yeah, this was a joke. Now head to the Large Hadron Collider..?",
     onFail="Noooo! This one is dumb too.")
 
 
 def clue1Action():
-    opensite('https://iiserm.github.io/turing-hunt/clue1.html')
+    opensite('clue1.html')
     a = input("What's the key? ")
     if a == "TUr!ng":
+        Pocket.append("Clue - Costly Machines, easy clues...")
         return True
     return False
 
@@ -312,9 +336,9 @@ biswas_car = Collectable(
 
 
 stadium_test = Collectable(
-    "Rocket Pad",
-    "in the stadium",
-    "Lets fly the rocket.\n"
+    name="Rocket Pad",
+    spot="in the stadium",
+    desc="Lets fly the rocket.\n"
     "It went so high that you can't even see it!!!\n\n\n"
     "Oh no! It's falling back! RUNNN!",
 )
@@ -323,13 +347,16 @@ stadium_test = Collectable(
 def printer_3d_action():
     print("Printer shows a message 'Please input the blueprint'")
     print("You should wait for the MS19 kids to finish...\n\nOr you could just print the blueprints now...")
-    return input("Do you want to print the blueprint? [Y N] ") == "Y"
+    if input("Do you want to print the blueprint? [Y N] ") == "Y":
+        Pocket.append("3D Printed Rocket")
+        return True
+    return False
 
 
 printer_3d = Collectable(
-    "a 3D printer",
-    "outside physics lab",
-    "You go near the 3D printer and see a bunch of MS19 students sleeping around it.\n"
+    name="a 3D printer",
+    spot="outside physics lab",
+    desc="You go near the 3D printer and see a bunch of MS19 students sleeping around it.\n"
     "\n\nThey are probably tired from waiting their turn at the printer.",
     hidden=True,
     action=printer_3d_action,
@@ -343,13 +370,16 @@ printer_3d = Collectable(
 def samrat_inno_action():
     im_show("rocket.jpg")
     print("Maybe I can 3D print this and see if it works")
-    return input("Do you want to steal - no, borrow - this? [Y N] ") == "Y"
+    if input("Do you want to steal - no, borrow - this? [Y N] ") == "Y":
+        Pocket.append("Rocket.jpg")
+        return True
+    return False
 
 
 samrat_inno = Collectable(
     name="a Blueprint",
     spot="on the table",
-    message="Innovation #42054....\n\n",
+    desc="Innovation #42054....\n\n",
     hidden=True,
     action=samrat_inno_action,
     nextnotes=[printer_3d],
@@ -367,7 +397,7 @@ def art_competition_action():
 art_competition = Collectable(
     name="multiple art pieces",
     spot="on soft boards",
-    message="There was an art competition held a few days ago.\n"
+    desc="There was an art competition held a few days ago.\n"
     "These are some of the beautiful paintings some people have made!",
     hidden=False,
     action=art_competition_action,
@@ -379,6 +409,7 @@ def torch_action():
     print("You turn it on and its very bright!\n")
     if input("Do you want to take it [Y N]? ") == "Y":
         H5.append_locations([Rotunda])
+        Pocket.append(torch)
         return True
     return False
 
@@ -394,29 +425,30 @@ torch = Collectable(
 
 """Add Notes to Locations"""
 
-H5.append_notes([hostel_cctv])
-H6.append_notes([hostel_cctv])
-H7.append_notes([hostel_cctv])
-H8.append_notes([hostel_cctv])
-H5_SR.append_notes([torch])
-Computer_Centre.append_notes([clue1])
-CAF.append_notes([clue2])
-T_Point.append_notes([biswas_car])
-AB1_3F.append_notes([printer_3d])
-AB1_5F.append_notes([samrat_inno])
-Stadium.append_notes([stadium_test])
-LHC.append_notes([art_competition, clue3])
-LH5.append_notes([clue4])
+H5.append_collectable([hostel_cctv])
+H6.append_collectable([hostel_cctv])
+H7.append_collectable([hostel_cctv])
+H8.append_collectable([hostel_cctv])
+H5_SR.append_collectable([torch])
+Computer_Centre.append_collectable([clue1])
+CAF.append_collectable([clue2])
+T_Point.append_collectable([biswas_car])
+AB1_3F.append_collectable([printer_3d])
+AB1_5F.append_collectable([samrat_inno])
+Stadium.append_collectable([stadium_test])
+LHC.append_collectable([art_competition, clue3])
+LH5.append_collectable([clue5])
+EBL_Lab.append_collectable([clue4])
 
 
 
 def makemap():
     g: nx.DiGraph = nx.DiGraph()
-    for loc in [Main_Gate, East_Gate, T_Point, Admin, CAF, Library, Computer_Centre, LHC, LH1, LH2, LH3, LH4, LH5, LH6, LH7, Rotunda, H5, H5_SR, H6, H6_SR, H7, H7_SR,
-                H8, H8_SR, Stadium, BB_Court, VH, VH_Terrace, Shopping_Complex, AB1, AB1_1F, AB1_2F, AB1_3F, AB1_4F, EBL_Lab, AB1_5F, AB2, Gazebo, Behind_AB, Animal_Facility]:
+    for loc in [Main_Gate, East_Gate, T_Point, Health_Center, Admin, CAF, Library, Computer_Centre, LHC, LH1, LH2, LH3, LH4, LH5, LH6, LH7, Rotunda, H5, H5_SR, H6, H6_SR, H7,
+                H7_SR, H8, H8_SR, Stadium, BB_Court, VH, VH_Terrace, Shopping_Complex, AB1, AB1_1F, AB1_2F, AB1_3F, AB1_4F, EBL_Lab, AB1_5F, AB2, Gazebo, Behind_AB, Animal_Facility]:
         for loc2 in loc.locations:
             g.add_edge(loc.name, loc2.name)
-    nx.draw_spring(g, with_labels=True)
+    nx.draw_kamada_kawai(g, with_labels=True)
     plt.show()
 
 
@@ -441,25 +473,32 @@ USE THE INTERNET!
 
 Go forth and do your best!'''
 
-makemap()
 print(hello_banner)
 input("Press Enter to start")
 here = H5_SR
 while True:
     screen_clear()
+    msg = ""
     print(here)
     print("\n\n")
     print("If you want to search around, type search or ls")
+    print("If you want to view map, type map")
+    print("If you want to view pocket, type pocket")
     print("If you want to go somewhere else, "
           "type goto _location_ or cd _location_")
     print("If you are debugging and want to exit, type exit. "
           "Remove before publishing to prevent accidental closing")
+
     inp = input("Your choice: ")
-    if re.search(r"^(search|ls)", inp):
+    if re.search(r"^(search|ls)$", inp):
         msg = here.search()
     elif match_obj := re.search(r"^(goto|cd) .*", inp):
         new_loc = inp[len(match_obj.group(1)) + 1:]
         msg, here = here.goto(new_loc)
+    elif re.search(r"^map$", inp):
+        makemap()
+    elif re.search(r"^pocket$", inp):
+        Pocket.show()
     elif re.search(r"^exit", inp):
         close_game()
     else:
