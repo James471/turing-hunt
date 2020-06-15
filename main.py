@@ -171,6 +171,31 @@ Animal_Facility.append_locations([LHC, East_Gate, AB1])
 
 """Build Actual clues"""
 
+def clue6Action():
+    print( """
+            The quest is to find the direction of your life...\n
+            Two roads... one towards the accelerator and one towards jordon\n 
+            And let your octaves fill the keanu reeves movie\n 
+            Apply some contrast of free will and maybe lose the negativity ...\n
+            You should be good to go now\n
+            """)
+    
+    ans = int(input("Enter your password: "))
+    if ans == 22:
+        return True
+    return False
+    
+       
+clue6 = Collectable(
+    "Umm... an old piece of paper?\n",
+    "Pasted on top of a box, in between h6&h8",
+    "Man these treasure hunt people need to stop dipping paper in coffee to make it seem old..\n"
+    "A number lock with  two digits! weird...\n",
+    True,
+    clue6Action,
+    None,
+    "Let's see what's inside the box now. ugh.. next location...",
+    "Hehe seems like you're directionally challenged :)\n look at it from a different perspective maybe" )
 
 def clue5Action():
     i = 0
@@ -194,13 +219,13 @@ clue5 = Collectable(
     "tucked inside the bottle...?",
     "Why would you do that?\n"
     "A small sheet with a few questions (that will definitely be counted for your consolidated grades :-))",
-    True,
+    False,
     clue5Action,
-    None,
-    "Yay!! You answered everything correctly!\n"
+    nextnotes=[clue6],
+    onComplete="Yay!! You answered everything correctly!\n"
     "*happy biologist noises*\n"
     "Maybe you should go tell your friends in Rotunda",
-    "OOPS. Looks like you'll need to start all over again")
+    onFail="OOPS. Looks like you'll need to start all over again")
 
 
 def clue4Action():
@@ -430,6 +455,7 @@ H6.append_collectable([hostel_cctv])
 H7.append_collectable([hostel_cctv])
 H8.append_collectable([hostel_cctv])
 H5_SR.append_collectable([torch])
+Rotunda.append_collectable([clue6])
 Computer_Centre.append_collectable([clue1])
 CAF.append_collectable([clue2])
 T_Point.append_collectable([biswas_car])
