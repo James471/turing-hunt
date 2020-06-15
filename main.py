@@ -169,7 +169,6 @@ Animal_Facility.append_locations([LHC, East_Gate, AB1])
 """Build Actual clues"""
 def clue4Action():
     i=0
-    nextq = False
     question_prompt = ["Cell's leader says 'Carry on!' suspiciously..." ,
     "Is the Spanish Crown alive?" , "Hiding in a plaza having a handicap" ,
     "Chris, who left the hotel, heads the Public Relations Forum at Caribou Biosciences"]
