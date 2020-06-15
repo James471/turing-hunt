@@ -4,6 +4,9 @@ import time
 import os
 import matplotlib.pyplot as pl
 import webbrowser
+from tkinter import Tk
+from tkinter.filedialog import askdirectory
+from shutil import copy
 
 if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
     is_exe = True
@@ -42,6 +45,22 @@ def im_show(filename: str):
     pl.show()
 
 
+def copyFile(filename):
+    tkroot = Tk()
+    tkroot.lift()
+    tkroot.attributes('-topmost', True)
+    tkroot.withdraw()
+    dst = askdirectory()
+    print("Copied to ", dst)
+    src = os.path.join(path_to_res, filename)
+    try:
+        _ = copy(src, dst)
+        return dst
+    except Exception as e:
+        print(e)
+        return False
+
+
 def close_game():
     if is_exe:
         sys.exit(0)
@@ -50,4 +69,4 @@ def close_game():
 
 
 def opensite(sitename):
-    webbrowser.open_new(sitename)
+    webbrowser.open_new("file://" + os.path.join(path_to_res, sitename))
