@@ -176,6 +176,31 @@ Room69.append_locations([Animal_Facility])
 
 """Build Actual clues"""
 
+def clue6Action():
+    print( """
+            The quest is to find the direction of your life...\n
+            Two roads... one towards the accelerator and one towards jordon\n 
+            And let your octaves fill the keanu reeves movie\n 
+            Apply some contrast of free will and maybe lose the negativity ...\n
+            You should be good to go now\n
+            """)
+    
+    ans = int(input("Enter your password: "))
+    if ans == 22:
+        return True
+    return False
+    
+       
+clue6 = Collectable(
+    "Umm... an old piece of paper?\n",
+    "Pasted on top of a box, in between h6&h8",
+    "Man these treasure hunt people need to stop dipping paper in coffee to make it seem old..\n"
+    "A number lock with  two digits! weird...\n",
+    True,
+    clue6Action,
+    None,
+    "Let's see what's inside the box now. ugh.. next location...",
+    "Hehe seems like you're directionally challenged :)\n look at it from a different perspective maybe" )
 
 
 def clue7Action():
@@ -226,11 +251,11 @@ clue5 = Collectable(
     "A small sheet with a few questions (that will definitely be counted for your consolidated grades :-))",
     True,
     clue5Action,
-    None,
-    "Yay!! You answered everything correctly!\n"
+    nextnotes=[clue6],
+    onComplete="Yay!! You answered everything correctly!\n"
     "*happy biologist noises*\n"
     "Maybe you should go tell your friends in Rotunda",
-    "OOPS. Looks like you'll need to start all over again")
+    onFail="OOPS. Looks like you'll need to start all over again")
 
 
 def clue4Action():
@@ -257,7 +282,7 @@ def clue3Action():
     print("Message: C.Amjg md eclcrgaq")  # change this please
     a = input("What does that mean? ")
     if a == "E.Coli of genetics":  # change this please
-        Pocket("Clue - E.Coli of genetics")
+        Pocket.append("Clue - E.Coli of genetics")
         return True
     return False
 
@@ -476,6 +501,7 @@ H7.append_collectable([hostel_cctv])
 H8.append_collectable([hostel_cctv])
 H8_SR.append_collectable([clue7])
 H5_SR.append_collectable([torch])
+Rotunda.append_collectable([clue6])
 Computer_Centre.append_collectable([clue1])
 CAF.append_collectable([clue2])
 T_Point.append_collectable([biswas_car])
@@ -489,13 +515,15 @@ Room69.append_collectable([room69poster])
 
 
 
+
 def makemap():
+    plt.figure(figsize=(10,10))
     g: nx.DiGraph = nx.DiGraph()
     for loc in [Main_Gate, East_Gate, T_Point, Health_Center, Admin, CAF, Library, Computer_Centre, LHC, LH1, LH2, LH3, LH4, LH5, LH6, LH7, Rotunda, H5, H5_SR, H6, H6_SR, H7,
                 H7_SR, H8, H8_SR, Stadium, BB_Court, VH, VH_Terrace, Shopping_Complex, AB1, AB1_1F, AB1_2F, AB1_3F, AB1_4F, EBL_Lab, AB1_5F, AB2, Gazebo, Behind_AB, Animal_Facility, Room69]:
         for loc2 in loc.locations:
             g.add_edge(loc.name, loc2.name)
-    nx.draw_kamada_kawai(g, with_labels=True)
+    nx.draw_kamada_kawai(g, with_labels=True,alpha=0.7,node_size=1000,font_size=10,width=2,arrows=True,edge_color='#6B6B6B')
     plt.show()
 
 
