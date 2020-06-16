@@ -219,7 +219,7 @@ clue7=Collectable(
     "Found a USB drive",
     "Hanging from the ceiling by means of a thread!Either the developer was too sleepy to think of anything better or this is a wierd place.",
     "Should plug it in my pc to check what it is",
-    hidden=False,
+    hidden=True,
     action=clue7Action,
     nextnotes=None,
     onComplete="That was some smart work! Truly 69 is an important number",
@@ -462,6 +462,10 @@ art_competition = Collectable(
 
 def room69Action():
     im_show('69.jpg')
+    print("Let's take a picture of this.")
+    a=input("Do you want to continue[Y/N]")
+    if(a=="Y"):
+        _=copyFile("69.jpg")
     return True
 
 
