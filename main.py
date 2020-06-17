@@ -184,6 +184,25 @@ Room69.append_locations([Animal_Facility])
 
 """Build Actual clues"""
 
+def clue8Action():
+    print("Is half the year over already?!")
+    im_show("calender.jpg")
+    ans = int(input("Enter the correct year: "))
+    if ans == 2036:
+        return True
+    return False
+
+clue8 = Collectable(
+    "An unusually clean sheet of paper",
+    "Taped to the pillar, above the wash basin" ,
+    "Seems kinda out of place between all these Melody chocolate posters from 2007" ,
+    hidden=False,
+    action=clue8Action,
+    nextnotes=None,
+    onComplete="Congratulations! You have successfully reached the end of this treasure hunt\n"
+               "You can go back to dying of boredom now. Bye.", #something else
+    onFail="Tsk.Tsk. So close yet so far. Try again.")
+
 
 def clue7Action():
     print("There is a file. Save it in your PC.")
@@ -206,7 +225,7 @@ clue7 = Collectable(
     "Should plug it in my pc to check what it is",
     hidden=False,
     action=clue7Action,
-    nextnotes=None,
+    nextnotes=[clue8],
     onComplete="That was some smart work! Truly 69 is an important number!",
     onFail="What's the first thing you do when you don't know what a file is?")
 
@@ -576,6 +595,7 @@ LHC.append_collectable([art_competition, clue3])
 LH5.append_collectable([clue5])
 Rotunda.append_collectable([clue6])
 H8_SR.append_collectable([clue7])
+Shopping_Complex.append_collectable([clue8])
 
 H5.append_collectable([hostel_cctv])
 H6.append_collectable([hostel_cctv])
