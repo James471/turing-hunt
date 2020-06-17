@@ -236,13 +236,13 @@ clue6 = Collectable(
     "It has a paper stuck on it...\n"
     "Man these treasure hunt people need to stop dipping paper in coffee to make it seem old..\n"
     "There's also a number lock with two digits!\n",
-    True,
-    clue6Action,
-    None,
-    "The box clicked open! Let's see what's inside."
+    hidden=True,
+    action=clue6Action,
+    nextnotes=None,
+    onComplete="The box clicked open! Let's see what's inside."
     "A key to VH Terrace and a Note that says-\n"
     "H-ate me or love me, you need to Study with me",
-    "The box didn't open.\n"
+    onFail="The box didn't open.\n"
     "Hehe seems like you're directionally challenged :)\n"
     "Look at it from a different perspective maybe")
 
@@ -497,9 +497,13 @@ art_competition = Collectable(
     onFail="Damn! Those were so pretty! I wish I could make things like that")
 
 
-def room69Action():
+def room69_action():
     im_show('69.jpg')
     Pocket.append("Clue - Go to Shopping Complex")
+    print("Let's take a picture of this.")
+    a = input("Do you want to continue[Y/N]")
+    if(a == "Y"):
+        _ = copyFile("69.jpg")
     return False
 
 
@@ -508,7 +512,7 @@ room69poster = Collectable(
     spot='everywhere, even on the ceiling',
     desc='There is a poster on the wall. Should read it.',
     hidden=False,
-    action=room69Action,
+    action=room69_action,
     onFail="Those are some weird things...\n"
     "I'm hungry now... I should check if Shopping Complex is open",
     onComplete="Unreachable. Report to devs.")
