@@ -30,7 +30,9 @@ class Collectable:
         self.onFail = onFail
 
     def __repr__(self):
-        return self.name + " - " + self.desc
+        
+        return "Found a " + self.name + " " +self.spot + \
+            "\n" + self.desc + "\n\n"
 
     def show(self):
         print(self)

@@ -19,9 +19,9 @@ T_Point = Location(
     "Hunh, I can see something weird in this mirror, Oh thats just me...")
 Admin = Location(
     "Admin",
-    "You enter the lovely automatic sliding doors, a cool blast of AC...\n" +
-    "You see the IISER-M model and remember that 4 more hostels need"
-    "to be built. But there's no funds...")
+    "You enter the lovely automatic sliding doors, a cool blast of AC...\n"
+    "You see the IISER-M model and remember that 4 more hostels need to be built.\n"
+    " But there's no funds...")
 CAF = Location(
     "CAF",
     "Very sensitive machines which may be disturbed by students "
@@ -33,36 +33,44 @@ Computer_Centre = Location("Computer Centre",
                            "A few computers have not been turned off")
 Health_Center = Location("Health Center", "A very dark and scary place...")
 
+Outside_LHC = Location("Outside LHC", "The LHC may be locked at this time...")
 LHC = Location("LHC", "Ah the good old LHC...")
-LH1 = Location('LH1', "Locked...")
-LH2 = Location('LH2', "Locked...")
-LH3 = Location('LH3', "Locked...")
-LH4 = Location('LH4', "Locked...")
-LH5 = Location('LH5', "Someone has left their bottle outside. Locked...")
-LH6 = Location('LH6', "Someone forgot their unbrella. Locked...")
+LH1 = Location('LH1', "There's a BIG flowchart on the board!")
+LH2 = Location('LH2', "There are so many computers.")
+LH3 = Location(
+    'LH3',
+    "You can still hear the debates that happened here a few hours ago.")
+LH4 = Location('LH4', "Nothing interesting")
+LH5 = Location('LH5', "Someone has left their bottle outside.")
+LH6 = Location(
+    'LH6',
+    'Someone forgot their umbrella. Some differential equations are written on the board')
 LH7 = Location(
     'LH7',
     "The watchman shoos you away. The stage is too precious to even repair...")
-
 
 Rotunda = Location(
     'Rotunda',
     'You see a gang of MS19 making a lot of noise...')
 H5 = Location(
     'H5',
-    'Caretaker\'s Office is locked. Why is it always locked? Hmm...')
+    'Caretaker\'s Office is locked. Why is it always locked? Hmm...\n'
+    "It's dark outside, you may need a torch")
 H5_SR = Location('H5 SR', "Back to the start...")
-H6 = Location('H6', 'Hos... The rest of the banner is torn...')
+H6 = Location('H6', 'Hos... The rest of the banner is torn...\n'
+              "It's dark outside, you may need a torch")
 H6_SR = Location(
     'H6 SR',
     'You see a couple snogging. They see you. It\'s so awkward')
-H7 = Location('H7', 'Someone is taking their clothes to wash...')
+H7 = Location('H7', 'Someone is taking their clothes to wash...\n'
+              "It's dark outside, you may need a torch")
 H7_SR = Location(
     'H7 SR',
     'Those Dance Club people are still dancing in the Dance Room')
 H8 = Location(
     'H8',
-    'Some MS18 kids are loitering around...')
+    'Some MS18 kids are loitering around...\n'
+    "It's dark outside, you may need a torch")
 H8_SR = Location(
     'H8 SR',
     'The ACs are off, its so hot...\nOh wait, they are on... '
@@ -72,7 +80,7 @@ Stadium = Location('Stadium', 'A lapwing shouts in the distance...')
 BB_Court = Location('BB Court', 'Why the fuck do lapwings make so much noise?')
 VH = Location(
     'VH',
-    'Dollar building. You see some... WHY THE FUCK ARE LAPWINGS EVERYWHERE?')
+    'Dollar building. The terrace may be locked')
 VH_Terrace = Location(
     'VH Terrace',
     'Haaah! Nice and windy. You see a couple of friends talking about the'
@@ -99,7 +107,7 @@ AB1_5F = Location(
     'Plastic Firecrackers...')
 AB2 = Location(
     'AB2',
-    'ERROR! The app devs didn\'t care enough to make 2 AB\'s.'
+    'ERROR! The app devs didn\'t care enough to make 2 AB\'s.\n'
     'There\'s nothing here. Go away, shoo.')
 Gazebo = Location(
     'Gazebo',
@@ -119,19 +127,23 @@ Animal_Facility = Location(
     'Animal Facility',
     'The everlasting humm of the machines...\n' +
     'What are these machines? What happens here? SO MANY QUESTIONS!')
+Room69 = Location(
+    'Room No. 69',
+    'Why is it numbered 69 if it is the only room here?\n' +
+    'I have found this place unlocked for the first time. Should explore it a bit.')
 
 """Connect the Locations to make a traversable map"""
 Main_Gate.append_locations([Behind_AB, Admin, CAF])
 East_Gate.append_locations([Animal_Facility, Behind_AB])
-T_Point.append_locations([CAF, LHC, Admin, Health_Center])
+T_Point.append_locations([CAF, Outside_LHC, Admin, Health_Center])
 Health_Center.append_locations([T_Point, BB_Court])
-Admin.append_locations([Library, Main_Gate, CAF, T_Point])
+Admin.append_locations([Main_Gate, CAF, T_Point])
 CAF.append_locations([Admin, Main_Gate, T_Point])
-Library.append_locations([Admin, LHC, Gazebo, Computer_Centre])
+Library.append_locations([Outside_LHC, Gazebo, Computer_Centre])
 Computer_Centre.append_locations([Library])
 
-LHC.append_locations([T_Point, Library, Rotunda, LH1,
-                      LH2, LH3, LH4, LH5, LH6, LH7])
+Outside_LHC.append_locations([T_Point, Library, Rotunda, Animal_Facility])
+LHC.append_locations([LH1, LH2, LH3, LH4, LH5, LH6, LH7, Outside_LHC])
 LH1.append_locations([LHC])
 LH2.append_locations([LHC])
 LH3.append_locations([LHC])
@@ -140,7 +152,7 @@ LH5.append_locations([LHC])
 LH6.append_locations([LHC])
 LH7.append_locations([LHC])
 
-Rotunda.append_locations([LHC, H5, H6, H7, H8, Stadium])
+Rotunda.append_locations([Outside_LHC, H5, H6, H7, H8, Stadium])
 H5.append_locations([H5_SR])
 H6.append_locations([Rotunda, H6_SR])
 H7.append_locations([Rotunda, H7_SR])
@@ -153,10 +165,10 @@ H8_SR.append_locations([H8])
 Stadium.append_locations([Rotunda, BB_Court, Shopping_Complex])
 BB_Court.append_locations([Health_Center, Stadium])
 Shopping_Complex.append_locations([Stadium, VH])
-VH.append_locations([VH_Terrace, Shopping_Complex])
+VH.append_locations([Shopping_Complex])
 VH_Terrace.append_locations([VH])
 
-AB1.append_locations([Gazebo, AB2, Behind_AB, AB1_1F, Animal_Facility])
+AB1.append_locations([Gazebo, AB2, Behind_AB, AB1_1F])
 AB1_1F.append_locations([AB1, AB1_2F])
 AB1_2F.append_locations([AB1_1F, AB1_3F])
 AB1_3F.append_locations([AB1_2F, AB1_4F])
@@ -166,10 +178,73 @@ AB1_5F.append_locations([AB1_4F])
 AB2.append_locations([Gazebo, Behind_AB, AB1])
 Gazebo.append_locations([Library, AB1, AB2, Behind_AB])
 Behind_AB.append_locations([Main_Gate, East_Gate, AB1, AB2, Gazebo])
-Animal_Facility.append_locations([LHC, East_Gate, AB1])
+Animal_Facility.append_locations([Outside_LHC, East_Gate, ])
+Room69.append_locations([Animal_Facility])
 
 
 """Build Actual clues"""
+
+
+def clue7Action():
+    print("There is a file. Save it in your PC.")
+    a = input("Would you like to proceed?[Y/N]")
+    if(a == "Y"):
+        _ = copyFile("image.jpg")
+    b = input("Enter the number if you have found it or press N to go back.")
+    if(b == "690"):
+        Pocket.append("Note - Truly, 69 is an important number")
+        Animal_Facility.append_locations([Room69])
+        return True
+    return False
+
+
+clue7 = Collectable(
+    "Found a USB drive",
+    "Hanging from the ceiling by means of a thread!\n"
+    "Either the developer was too sleepy to think of anything better "
+    "or this is a wierd place.",
+    "Should plug it in my pc to check what it is",
+    hidden=False,
+    action=clue7Action,
+    nextnotes=None,
+    onComplete="That was some smart work! Truly 69 is an important number!",
+    onFail="What's the first thing you do when you don't know what a file is?")
+
+
+def clue6Action():
+    print("""
+            The quest is to find the direction of your life...\n
+            Two roads... first towards the accelerator and second towards jordon\n
+            And let your octaves fill the keanu reeves movie\n
+            Apply some contrast of free will and maybe lose the negativity ...\n
+            You should be good to go now\n
+            """)
+
+    ans = int(input("Enter your password: "))
+    if ans == 22:
+        Pocket.append(
+            "Clue - H-ate me or love me, you need to Study with me")
+        Pocket.append("Key to VH Terrace")
+        VH.append_locations([VH_Terrace])
+        return True
+    return False
+
+
+clue6 = Collectable(
+    "An old box",
+    "between H6 & H8",
+    "It has a paper stuck on it...\n"
+    "Man these treasure hunt people need to stop dipping paper in coffee to make it seem old..\n"
+    "There's also a number lock with two digits!\n",
+    hidden=True,
+    action=clue6Action,
+    nextnotes=None,
+    onComplete="The box clicked open! Let's see what's inside."
+    "A key to VH Terrace and a Note that says-\n"
+    "H-ate me or love me, you need to Study with me",
+    onFail="The box didn't open.\n"
+    "Hehe seems like you're directionally challenged :)\n"
+    "Look at it from a different perspective maybe")
 
 
 def clue5Action():
@@ -196,11 +271,11 @@ clue5 = Collectable(
     "A small sheet with a few questions (that will definitely be counted for your consolidated grades :-))",
     True,
     clue5Action,
-    None,
-    "Yay!! You answered everything correctly!\n"
+    nextnotes=[clue6],
+    onComplete="Yay!! You answered everything correctly!\n"
     "*happy biologist noises*\n"
     "Maybe you should go tell your friends in Rotunda",
-    "OOPS. Looks like you'll need to start all over again")
+    onFail="OOPS. Looks like you'll need to start all over again")
 
 
 def clue4Action():
@@ -216,9 +291,9 @@ clue4 = Collectable(
     "Maybe this holds some mysteries to the next location?",
     hidden=True,
     action=clue4Action,
+    nextnotes=[clue5],
     onComplete="Read the copied file, the secret lies within",
-    onFail="File copy error, retry"
-)
+    onFail="File copy error, retry")
 
 
 def clue3Action():
@@ -227,7 +302,7 @@ def clue3Action():
     print("Message: C.Amjg md eclcrgaq")  # change this please
     a = input("What does that mean? ")
     if a == "E.Coli of genetics":  # change this please
-        Pocket("Clue - E.Coli of genetics")
+        Pocket.append("Clue - E.Coli of genetics")
         return True
     return False
 
@@ -247,7 +322,7 @@ def clue2Action():
     opensite("clue2.html")
     a = input("What's the password? ")
     if a == "acceptme":
-        Pocket.append("clue - Large Hadron Collider")
+        Pocket.append("Clue - Large Hadron Collider")
         return True
     return False
 
@@ -285,6 +360,24 @@ clue1 = Collectable(
     onFail="No, it's the first question. It's dumber than you think!")
 
 
+def lhckey_action():
+    if input("Pick it?[Y N] ") == "Y":
+        Outside_LHC.append_locations([LHC])
+        Pocket.append("LHC Key")
+        return True
+    return False
+
+
+lhckey = Collectable(
+    "LHC Key",
+    "hanging by the security",
+    "It looks like a normal key. Maybe you can finally see what's inside LHC?",
+    hidden=False,
+    action=lhckey_action,
+    onComplete="Now get out of here before the security guard comes back",
+    onFail="There was a nice art exhibition in LHC I heard?")
+
+
 """ Build FLUFF """
 hostel_cctv = Collectable(
     "Notice",
@@ -320,19 +413,19 @@ def biswas_car_action():
         [Behind_AB, East_Gate, Animal_Facility, LHC, BB_Court, Stadium, Shopping_Complex])
     print("You followed the car and ended up in " + choice.name + "!")
     here = choice
-    return True
+    return False
 
 
 biswas_car = Collectable(
     "A Red sedan",
     "coming from Animal Facility road",
     "It's approaching almost quasistatically...\n"
-    "Why would someone be driving around at midnight?! This is pretty shady.",
+    "Why would someone be driving around at midnight?! This is pretty shady."
+    "Probably not important. It's not like they're going to run over anybody.\nRight?\n\nRIGHT?",
     hidden=False,
     action=biswas_car_action,
-    nextnotes=[],
-    onComplete="This had better be worth-- \n WAIT! THE DRIVER IS ASLEEP?! *facepalm*",
-    onFail="Probably not important. It's not like they're going to run over anybody.\nRight?\n\nRIGHT?")
+    onComplete="Unreachable. Report to devs",
+    onFail="This had better be worth-- \n WAIT! THE DRIVER IS ASLEEP?! *facepalm*")
 
 
 stadium_test = Collectable(
@@ -340,8 +433,7 @@ stadium_test = Collectable(
     spot="in the stadium",
     desc="Lets fly the rocket.\n"
     "It went so high that you can't even see it!!!\n\n\n"
-    "Oh no! It's falling back! RUNNN!",
-)
+    "Oh no! It's falling back! RUNNN!",)
 
 
 def printer_3d_action():
@@ -380,7 +472,7 @@ samrat_inno = Collectable(
     name="a Blueprint",
     spot="on the table",
     desc="Innovation #42054....\n\n",
-    hidden=True,
+    hidden=False,
     action=samrat_inno_action,
     nextnotes=[printer_3d],
     onComplete="We will have to find a 3D printer...",
@@ -391,7 +483,7 @@ def art_competition_action():
     im_show("art1.jpg")
     im_show("art2.jpg")
     im_show("art3.jpg")
-    return True
+    return False
 
 
 art_competition = Collectable(
@@ -401,15 +493,36 @@ art_competition = Collectable(
     "These are some of the beautiful paintings some people have made!",
     hidden=False,
     action=art_competition_action,
-    onComplete="Damn! Those were so pretty! I wish I could make things like that"
-)
+    onComplete="Unreachable. Report to devs",
+    onFail="Damn! Those were so pretty! I wish I could make things like that")
+
+
+def room69_action():
+    im_show('69.jpg')
+    Pocket.append("Clue - Go to Shopping Complex")
+    print("Let's take a picture of this.")
+    a = input("Do you want to continue[Y/N]")
+    if(a == "Y"):
+        _ = copyFile("69.jpg")
+    return False
+
+
+room69poster = Collectable(
+    name='A lot of cult articles',
+    spot='everywhere, even on the ceiling',
+    desc='There is a poster on the wall. Should read it.',
+    hidden=False,
+    action=room69_action,
+    onFail="Those are some weird things...\n"
+    "I'm hungry now... I should check if Shopping Complex is open",
+    onComplete="Unreachable. Report to devs.")
 
 
 def torch_action():
     print("You turn it on and its very bright!\n")
     if input("Do you want to take it [Y N]? ") == "Y":
         H5.append_locations([Rotunda])
-        Pocket.append(torch)
+        Pocket.append("A red Torch")
         return True
     return False
 
@@ -423,31 +536,79 @@ torch = Collectable(
     onComplete="You can now see in the dark and outside!",
     onFail="You should really take it...")
 
+
+def mmystery_board_action():
+    im_show("board.jpg")
+    return False
+
+
+mmystery_board = Collectable(
+    name="flowchart",
+    spot="on the board",
+    message="These Murder Mystery people are out of their mind.",
+    hidden=False,
+    action=mmystery_board_action,
+    onComplete="Unreachable. Report to devs",
+    onFail=""
+)
+
+
+def mmystery_poster_action():
+    im_show("mmystery.jpg")
+    return False
+
+
+mmystery_poster = Collectable(
+    name="poster for murder mystery",
+    spot="on the table",
+    desc="There's a sign under the poster. '- Bhavneet Singh'",
+    hidden=False,
+    action=mmystery_poster_action,
+    onComplete="Unreachable. Report to devs",
+    onFail="This guy can make nice posters!"
+)
 """Add Notes to Locations"""
+
+Computer_Centre.append_collectable([clue1])
+CAF.append_collectable([clue2])
+EBL_Lab.append_collectable([clue4])
+LHC.append_collectable([art_competition, clue3])
+LH5.append_collectable([clue5])
+Rotunda.append_collectable([clue6])
+H8_SR.append_collectable([clue7])
 
 H5.append_collectable([hostel_cctv])
 H6.append_collectable([hostel_cctv])
 H7.append_collectable([hostel_cctv])
 H8.append_collectable([hostel_cctv])
-H5_SR.append_collectable([torch])
-Computer_Centre.append_collectable([clue1])
-CAF.append_collectable([clue2])
-T_Point.append_collectable([biswas_car])
+
 AB1_3F.append_collectable([printer_3d])
 AB1_5F.append_collectable([samrat_inno])
 Stadium.append_collectable([stadium_test])
-LHC.append_collectable([art_competition, clue3])
-LH5.append_collectable([clue5])
-EBL_Lab.append_collectable([clue4])
+
+Admin.append_collectable([lhckey])
+H5_SR.append_collectable([torch])
+T_Point.append_collectable([biswas_car])
+Room69.append_collectable([room69poster])
 
 
-def makemap():
+def makemap(root):
     g: nx.DiGraph = nx.DiGraph()
-    for loc in [Main_Gate, East_Gate, T_Point, Health_Center, Admin, CAF, Library, Computer_Centre, LHC, LH1, LH2, LH3, LH4, LH5, LH6, LH7, Rotunda, H5, H5_SR, H6, H6_SR, H7,
-                H7_SR, H8, H8_SR, Stadium, BB_Court, VH, VH_Terrace, Shopping_Complex, AB1, AB1_1F, AB1_2F, AB1_3F, AB1_4F, EBL_Lab, AB1_5F, AB2, Gazebo, Behind_AB, Animal_Facility]:
-        for loc2 in loc.locations:
-            g.add_edge(loc.name, loc2.name)
-    nx.draw_kamada_kawai(g, with_labels=True)
+
+    def makenodes(root, l):
+        if root not in l:
+            l.append(root)
+            for loc2 in root.locations:
+                g.add_edge(root.name, loc2.name)
+                makenodes(loc2, l)
+    makenodes(root, [])
+    nx.draw_kamada_kawai(
+        g,
+        with_labels=True,
+        node_size=750,
+        font_size=7,
+        width=2,
+        edge_color='#6B6B6B')
     plt.show()
 
 
@@ -495,7 +656,7 @@ while True:
         new_loc = inp[len(match_obj.group(1)) + 1:]
         msg, here = here.goto(new_loc)
     elif re.search(r"^map$", inp):
-        makemap()
+        makemap(here)
     elif re.search(r"^pocket$", inp):
         Pocket.show()
     elif re.search(r"^exit", inp):
