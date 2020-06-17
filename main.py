@@ -545,7 +545,7 @@ def mmystery_board_action():
 mmystery_board = Collectable(
     name="flowchart",
     spot="on the board",
-    message="These Murder Mystery people are out of their mind.",
+    desc="These Murder Mystery people are out of their mind.",
     hidden=False,
     action=mmystery_board_action,
     onComplete="Unreachable. Report to devs",
@@ -635,6 +635,14 @@ Go forth and do your best!'''
 
 print(hello_banner)
 input("Press Enter to start")
+
+screen_clear()
+print("This is a sys test. Report to devs if any errors are shown.")
+input("Enter to continue:")
+makemap(Rotunda)
+im_show("rocket.jpg")
+copyFile("mutations.pdf")
+
 here = H5_SR
 while True:
     screen_clear()
