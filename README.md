@@ -1,9 +1,3 @@
-# T-Hunt Source
+# Turing Hunt
 
-This is the source code for the Treasure Hunt.
-
-Make private until THunt ends
-
-Use <https://github.com/iiserm/turing-hunt> for the website
-
-Release to turing-hunt, not here.
+The website for the event is <https://iiserm.github.com/turing-hunt>
