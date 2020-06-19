@@ -19,8 +19,8 @@ Turing Club hopes to make this an annual event, much like other Treasure Hunts, 
   - [Madhumati](https://github.com/madhums511)
 
 - Art Competition Pieces
-  - [Shivali](https://www.instagram.com/m0tifs_/)
-  - Saloni
+  - [Shivali](https://www.instagram.com/m0tifs_)
+  - [Saloni](https://instagram.com/films_on_paper)
 
 - Night Sky Images
   - Kaustubh
